@@ -21,12 +21,12 @@ if (backendParam) {
   localStorage.setItem('jk_backend_url', backendParam);
   // Clean URL query parameters from browser address bar
   const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-  window.history.replaceState({path: cleanUrl}, '', cleanUrl);
+  window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
 }
 
 const API_BASE = (location.protocol === 'file:')
   ? (localStorage.getItem('jk_backend_url') || 'http://localhost:3000')
-  : (localStorage.getItem('jk_backend_url') || '');
+  : (localStorage.getItem('jk_backend_url') || 'https://hr-project-sqfw.onrender.com');
 
 console.log('JK Placements Engine API Base:', API_BASE || '(same origin)');
 
@@ -62,7 +62,7 @@ const APP = {
       const res = await fetch(API_BASE + '/api/db');
       if (res.ok) {
         let data = await res.json();
-        
+
         // --- Smart Sync Unsynced Items First ---
         let hasUnsynced = false;
 
@@ -575,14 +575,14 @@ ${interview ? `
       document.addEventListener('contextmenu', e => e.preventDefault());
       document.addEventListener('copy', e => e.preventDefault());
       document.addEventListener('keydown', e => {
-        if ((e.ctrlKey && ['c','v','u','s','a','p'].includes(e.key.toLowerCase())) || e.key === 'F12')
+        if ((e.ctrlKey && ['c', 'v', 'u', 's', 'a', 'p'].includes(e.key.toLowerCase())) || e.key === 'F12')
           e.preventDefault();
       });
     },
     flag: (reason, callback) => {
       APP.antiCheat.violations++;
       APP.toast(`⚠️ Warning (${APP.antiCheat.violations}/${APP.antiCheat.maxViolations}): ${reason}`, 'warning', 4000);
-      
+
       // Update result record state synchronously if available
       const currentCand = APP.session.getCandidate();
       if (currentCand) {
@@ -610,20 +610,20 @@ ${interview ? `
 // Initialize theme and database synchronization on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
   APP.db.init();
-  
+
   // Navbar scroll effect
   const nav = document.querySelector('.navbar');
   if (nav) {
     window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); });
   }
-  
+
   // Hamburger menu toggle
   const ham = document.querySelector('.hamburger');
   const navLinks = document.querySelector('.nav-links');
   if (ham && navLinks) {
     ham.addEventListener('click', () => navLinks.classList.toggle('open'));
   }
-  
+
   // Create toast container if missing
   if (!document.getElementById('toast-container')) {
     const el = document.createElement('div');
