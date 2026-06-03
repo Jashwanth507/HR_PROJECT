@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Candidate Login – JK Private Limited</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .login-page {
+      min-height: 100vh; display: flex; padding-top: 72px;
+    }
+    .login-left {
+      flex: 1; background: var(--dark-section-bg);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      padding: 60px 48px; position: relative; overflow: hidden;
+    }
+    .login-left::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+      background-size: 34px 34px;
+    }
+    .left-orb-1 { position:absolute;width:350px;height:350px;border-radius:50%;background:var(--orb-1);filter:blur(80px);top:-80px;right:-80px; }
+    .left-orb-2 { position:absolute;width:250px;height:250px;border-radius:50%;background:var(--orb-2);filter:blur(60px);bottom:-40px;left:-40px; }
+    .login-left-content { position: relative; z-index: 1; max-width: 380px; text-align: center; }
+    .login-left h2 { font-family: var(--font-heading); font-size: 1.9rem; font-weight: 900; color: white; margin-bottom: 14px; letter-spacing: -0.5px; }
+    .login-left p { color: rgba(255,255,255,0.55); font-size: 0.92rem; line-height: 1.8; margin-bottom: 32px; }
+    .left-stat-row { display: flex; justify-content: center; gap: 32px; margin-top: 32px; }
+    .left-stat { text-align: center; }
+    .left-stat-val { font-family: var(--font-heading); font-size: 1.8rem; font-weight: 900; color: white; display: block; }
+    .left-stat-lbl { font-size: 0.75rem; color: rgba(255,255,255,0.45); }
+    .login-right {
+      flex: 0.9; background: var(--bg-alt); display: flex;
+      align-items: center; justify-content: center; padding: 48px;
+    }
+    .login-box { max-width: 420px; width: 100%; }
+    .login-logo {
+      width: 56px; height: 56px; border-radius: 16px;
+      background: var(--navy-mid);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-heading); font-weight: 900; color: var(--btn-primary-text); font-size: 21px;
+      box-shadow: var(--shadow-sm); margin-bottom: 24px;
+    }
+    .login-box h1 { font-family: var(--font-heading); font-size: 1.7rem; font-weight: 900; color: var(--text); margin-bottom: 6px; }
+    [data-theme="dark"] .login-box h1 { color: var(--text); }
+    .login-box > p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 32px; }
+    .or-divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; color: var(--text-muted); font-size: 0.82rem; }
+    .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    @media(max-width:800px){ .login-left{display:none;} .login-right{flex:1;} }
+  </style>
+</head>
+<body>
+  <nav class="navbar glassmorphic shadow-sm sticky top-0 z-50">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo">JK</div>
+      <span class="nav-name">JK Private Limited</span>
+    </a>
+    <div class="nav-actions">
+      <a href="register.html" class="btn-nav-sky btn-rounded">Register</a>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px; z-index: 1001;">
+      <button class="theme-toggle" onclick="APP.theme.toggle()">🌙</button>
+    </div>
+  </nav>
+
+  <div class="login-page">
+    <div class="login-left">
+      <div class="left-orb-1"></div>
+      <div class="left-orb-2"></div>
+      <div class="login-left-content">
+        <div style="font-size:3rem;margin-bottom:16px">🎓</div>
+        <h2>Welcome Back to JK Recruitment</h2>
+        <p>Log in with your registered email to access your test, results, and interview schedule.</p>
+        <div class="left-stat-row">
+          <div class="left-stat"><span class="left-stat-val">2.4k+</span><span class="left-stat-lbl">Applicants</span></div>
+          <div class="left-stat"><span class="left-stat-val">70%</span><span class="left-stat-lbl">Pass Score</span></div>
+          <div class="left-stat"><span class="left-stat-val">500+</span><span class="left-stat-lbl">Hired</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-right">
+      <div class="login-box">
+        <div class="login-logo">JK</div>
+        <h1>Candidate Login</h1>
+        <p>Access your dashboard, results &amp; interview details.</p>
+
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">Registered Email</label>
+            <input type="email" id="login-email" class="form-control" placeholder="your@email.com" required autocomplete="email" />
+          </div>
+          <div id="login-alert"></div>
+          <button type="submit" class="btn btn-navy" style="width:100%;margin-top:4px" id="loginBtn">
+            Access Dashboard →
+          </button>
+        </form>
+
+        <div class="or-divider">or</div>
+
+        <a href="register.html" class="btn btn-outline-sky" style="width:100%;justify-content:center">
+          New Candidate? Register Here
+        </a>
+
+        <p style="text-align:center;margin-top:20px;font-size:0.8rem;color:var(--text-muted)">
+          <a href="admin.html" style="color:var(--sky-dark)">Admin Login →</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="nav.js"></script>
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (APP.session.getCandidate()) window.location.href = 'dashboard.html';
+    });
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim().toLowerCase();
+      const alertEl = document.getElementById('login-alert');
+      const btn = document.getElementById('loginBtn');
+      btn.textContent = 'Checking...'; btn.disabled = true;
+      alertEl.innerHTML = '';
+      
+      fetch(APP.API_BASE + '/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error('Account not found');
+        }
+        return response.json();
+      })
+      .then((candidate) => {
+        // Sync local session and cache
+        APP.session.setCandidate(candidate);
+        APP.candidates.add(candidate);
+        APP.sync(); // Trigger background sync to pull test results etc
+
+        APP.toast('Welcome back, ' + candidate.fullName.split(' ')[0] + '! 👋', 'success');
+        setTimeout(() => window.location.href = 'dashboard.html', 700);
+      })
+      .catch((err) => {
+        alertEl.innerHTML = `<div class="alert alert-danger">No account found. <a href="register.html" style="color:var(--magenta);font-weight:700">Register here →</a></div>`;
+        btn.textContent = 'Access Dashboard →'; btn.disabled = false;
+      });
+    }
+  </script>
+</body>
+</html>

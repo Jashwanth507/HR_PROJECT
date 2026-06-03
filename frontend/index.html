@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JK Private Limited – Recruitment Portal</title>
+  <meta name="description" content="Join JK Private Limited – building innovative government and enterprise solutions. Apply for campus placements." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="landing.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar glassmorphic shadow-sm sticky top-0 z-50" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo">JK</div>
+      <div>
+        <div class="nav-name">JK Private Limited</div>
+      </div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#about">About</a>
+      <a href="#comparison">Comparison</a>
+      <a href="#features">Features</a>
+      <a href="#process">Process</a>
+      <a href="#contact">Contact</a>
+      <a href="login.html" class="mobile-only-nav-link">Login</a>
+      <a href="register.html" class="mobile-only-nav-link">Apply Now →</a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="btn-nav-outline btn-rounded">Login</a>
+      <a href="register.html" class="btn-nav-sky btn-rounded">Apply Now →</a>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px; z-index: 1001;">
+      <button class="theme-toggle" onclick="APP.theme.toggle()" title="Toggle theme">🌙</button>
+      <div class="hamburger" id="hamburger" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero bg-texture-dots py-20" id="home">
+    <div class="hero-bg">
+      <div class="hero-grid"></div>
+      <div class="hero-stars"></div>
+      <div class="hero-orb hero-orb-1" style="background: rgba(16, 185, 129, 0.06)"></div>
+      <div class="hero-orb hero-orb-2" style="background: rgba(5, 150, 105, 0.04)"></div>
+      <div class="hero-orb hero-orb-3" style="background: rgba(52, 211, 153, 0.02)"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge animate-fade-up glassmorphic">
+        <span class="pulse-dot" style="background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
+        Campus Recruitment 2025 – Now Open
+      </div>
+
+      <div class="hero-logo-wrap animate-fade-up" style="animation-delay:.1s">
+        <div class="hero-logo" style="border-color: var(--sky);">JK</div>
+      </div>
+
+      <h1 class="hero-title tracking-tighter animate-fade-up" style="animation-delay:.2s; font-size: clamp(2.5rem, 6.5vw, 4.5rem);">
+        The recruitment wave is here.<br>
+        <span style="background: linear-gradient(135deg, var(--gradient-forest-start), var(--gradient-forest-end)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Ride it or regret it.</span>
+      </h1>
+      
+      <p class="hero-tagline animate-fade-up" style="animation-delay:.3s; max-width: 680px; margin-left: auto; margin-right: auto;">
+        Join JK Private Limited – building innovative government &amp; enterprise products. 
+        Take the aptitude test, get evaluated instantly, and secure your place.
+      </p>
+
+      <!-- Inline Registration/Apply Form -->
+      <div class="animate-fade-up" style="animation-delay:.4s; margin-bottom: 48px;" id="hero-action-container">
+        <form class="hero-email-form" onsubmit="handleHeroSubmit(event)">
+          <input type="email" id="hero-email" placeholder="Enter your email to apply" required />
+          <button class="btn btn-navy btn-rounded" type="submit">Apply Now →</button>
+        </form>
+        <p class="text-sm text-muted-foreground mt-3 text-center">Instant eligibility check · Secure aptitude test</p>
+      </div>
+
+      <div class="hero-stats animate-fade-up glassmorphic" style="animation-delay:.5s; border-color: var(--border);">
+        <div class="hero-stat"><span class="hero-stat-val">500+</span><span class="hero-stat-lbl">Employees</span></div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat"><span class="hero-stat-val">50+</span><span class="hero-stat-lbl">Govt Projects</span></div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat"><span class="hero-stat-val">15+</span><span class="hero-stat-lbl">Years</span></div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat"><span class="hero-stat-val">12</span><span class="hero-stat-lbl">State Clients</span></div>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="scroll-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ========== ABOUT ========== -->
+  <section class="section" id="about">
+    <div class="section-header">
+      <span class="section-tag">About Us</span>
+      <h2 class="section-title">Who We <em>Are</em></h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">A product-based software company delivering cutting-edge digital transformation for government departments and enterprise organizations across India.</p>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-content">
+        <div class="about-item">
+          <div class="about-icon">🏛️</div>
+          <div>
+            <h3>Government-Focused Solutions</h3>
+            <p>We build robust, scalable platforms for state and central government — from digital citizen portals to internal ERP systems trusted by millions.</p>
+          </div>
+        </div>
+        <div class="about-item">
+          <div class="about-icon">🏢</div>
+          <div>
+            <h3>Enterprise Products</h3>
+            <p>Our enterprise suite includes HRMS, CRM, ERP, and analytics platforms used by leading organizations across multiple sectors.</p>
+          </div>
+        </div>
+        <div class="about-item">
+          <div class="about-icon">🔐</div>
+          <div>
+            <h3>Security &amp; Compliance</h3>
+            <p>ISO 27001 certified. Every product is built to government-grade security standards with full data privacy and GDPR compliance.</p>
+          </div>
+        </div>
+        <div class="about-item">
+          <div class="about-icon">🚀</div>
+          <div>
+            <h3>Innovation at Scale</h3>
+            <p>With 500+ engineers embracing AI, Cloud, and Blockchain — we solve real-world problems at national scale.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-visual">
+        <div class="about-card-stack">
+          <div class="about-tech-card">
+            <div class="tech-header">⚙️ Core Technologies</div>
+            <div class="tech-grid">
+              <span class="tech-pill">Java</span>
+              <span class="tech-pill">Python</span>
+              <span class="tech-pill">React</span>
+              <span class="tech-pill">Node.js</span>
+              <span class="tech-pill">AWS</span>
+              <span class="tech-pill">Docker</span>
+              <span class="tech-pill">PostgreSQL</span>
+              <span class="tech-pill">AI / ML</span>
+              <span class="tech-pill">Kubernetes</span>
+              <span class="tech-pill">Microservices</span>
+            </div>
+          </div>
+          <div class="about-metric-card">
+            <div class="metric-row">
+              <div class="metric-icon">🌐</div>
+              <div><div class="metric-val">₹200 Cr+ Revenue</div><div class="metric-lbl">Annual Turnover</div></div>
+            </div>
+            <div class="metric-row">
+              <div class="metric-icon">🏆</div>
+              <div><div class="metric-val">ISO 27001 Certified</div><div class="metric-lbl">Security &amp; Compliance</div></div>
+            </div>
+            <div class="metric-row">
+              <div class="metric-icon">📍</div>
+              <div><div class="metric-val">8 Offices Pan India</div><div class="metric-lbl">Noida · Mumbai · Bengaluru · More</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== GOVERNMENT PROJECTS ========== -->
+  <section class="section section-navy" id="projects">
+    <div class="section-navy-orb" style="width:500px;height:500px;background:var(--orb-1);top:-100px;right:-100px;border-radius:50%;filter:blur(90px);position:absolute;"></div>
+    <div class="section-navy-orb" style="width:350px;height:350px;background:var(--orb-2);bottom:-60px;left:-60px;border-radius:50%;filter:blur(80px);position:absolute;"></div>
+
+    <div class="section-header">
+      <span class="section-tag">Our Work</span>
+      <h2 class="section-title">Government <span>Projects</span></h2>
+      <div class="divider"></div>
+      <p class="section-subtitle" style="color:rgba(255,255,255,0.6)">Powering digital transformation for India's public sector with cutting-edge technology</p>
+    </div>
+
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-icon">🏥</div>
+        <div class="project-badge">Healthcare</div>
+        <h3>State Health Portal</h3>
+        <p>Integrated health record management for 5 states, covering 2 crore+ citizens with telemedicine support and AI-powered diagnosis.</p>
+        <div class="project-tags"><span>React</span><span>Node.js</span><span>AWS</span></div>
+      </div>
+      <div class="project-card project-card-featured">
+        <div class="project-icon">📋</div>
+        <div class="project-badge badge-gold">⭐ Flagship</div>
+        <h3>e-Governance Suite</h3>
+        <p>End-to-end digital governance platform for document management, citizen approvals, and service delivery at national scale.</p>
+        <div class="project-tags"><span>Java</span><span>Spring Boot</span><span>PostgreSQL</span></div>
+      </div>
+      <div class="project-card">
+        <div class="project-icon">🏫</div>
+        <div class="project-badge">Education</div>
+        <h3>EdTech for Gov Schools</h3>
+        <p>Digital learning platform deployed in 3,000+ government schools with AI-powered adaptive learning for 1M+ students.</p>
+        <div class="project-tags"><span>Python</span><span>AI/ML</span><span>React</span></div>
+      </div>
+      <div class="project-card">
+        <div class="project-icon">🌾</div>
+        <div class="project-badge">Agriculture</div>
+        <h3>Farmer Connect Portal</h3>
+        <p>Real-time market price, weather alerts, and subsidy management for 10 lakh+ registered farmers across 4 states.</p>
+        <div class="project-tags"><span>IoT</span><span>Node.js</span><span>MongoDB</span></div>
+      </div>
+      <div class="project-card">
+        <div class="project-icon">🚔</div>
+        <div class="project-badge">Public Safety</div>
+        <h3>Smart Policing System</h3>
+        <p>Integrated crime tracking, digital FIR management, and analytics dashboard for law enforcement agencies.</p>
+        <div class="project-tags"><span>Java</span><span>Elasticsearch</span><span>Docker</span></div>
+      </div>
+      <div class="project-card">
+        <div class="project-icon">🏗️</div>
+        <div class="project-badge">Infrastructure</div>
+        <h3>Smart City Dashboard</h3>
+        <p>Real-time monitoring of city infrastructure — traffic, utilities, and emergency response for 3 smart cities.</p>
+        <div class="project-tags"><span>IoT</span><span>Kafka</span><span>Kubernetes</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== RECRUITMENT PROCESS ========== -->
+  <section class="section section-alt" id="process">
+    <div class="section-header">
+      <span class="section-tag">How It Works</span>
+      <h2 class="section-title">Recruitment <em>Process</em></h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">A transparent, merit-based process designed to find and reward the best talent</p>
+    </div>
+
+    <div class="process-timeline">
+      <div class="process-step">
+        <div class="step-icon-wrap">
+          📝
+          <div class="step-num">1</div>
+        </div>
+        <h3>Register</h3>
+        <p>Fill in your academic and personal details to create your candidate profile.</p>
+        <div class="step-time">~5 mins</div>
+      </div>
+      <div class="process-connector"></div>
+      <div class="process-step">
+        <div class="step-icon-wrap">
+          🧠
+          <div class="step-num">2</div>
+        </div>
+        <h3>Aptitude Test</h3>
+        <p>30 randomised MCQs covering Quantitative, Logical &amp; Verbal Ability.</p>
+        <div class="step-time">30 mins</div>
+      </div>
+      <div class="process-connector"></div>
+      <div class="process-step">
+        <div class="step-icon-wrap">
+          ⚡
+          <div class="step-num">3</div>
+        </div>
+        <h3>Auto Evaluation</h3>
+        <p>Results are instant. Score 70%+ to qualify for the HR interview round.</p>
+        <div class="step-time">Instant</div>
+      </div>
+      <div class="process-connector"></div>
+      <div class="process-step">
+        <div class="step-icon-wrap">
+          📅
+          <div class="step-num">4</div>
+        </div>
+        <h3>HR Interview</h3>
+        <p>Qualified candidates schedule an HR interview — online or in person.</p>
+        <div class="step-time">~1 Hour</div>
+      </div>
+      <div class="process-connector"></div>
+      <div class="process-step">
+        <div class="step-icon-wrap">
+          🎉
+          <div class="step-num">5</div>
+        </div>
+        <h3>Final Selection</h3>
+        <p>Selected candidates receive the offer letter and onboarding details via email.</p>
+        <div class="step-time">1–2 Weeks</div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:60px">
+      <a href="register.html" class="btn btn-primary btn-lg">Begin Your Journey →</a>
+    </div>
+  </section>
+
+  <!-- ========== COMPARISON SECTION ========== -->
+  <section class="section py-20 bg-texture-dots" id="comparison">
+    <div class="section-header">
+      <span class="section-tag">Portal Comparison</span>
+      <h2 class="section-title tracking-tighter">The best way to kickstart your <em>career</em></h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">Why traditional recruitment processes fall behind while JK Portal ensures a fast, direct, and transparent hiring path.</p>
+    </div>
+
+    <div class="comparison-grid animate-fade-up">
+      <div class="comparison-header comparison-col-traditional text-left">Traditional Placement Process</div>
+      <div class="comparison-header comparison-col-jk text-left bg-gradient-to-br">JK Recruitment Portal</div>
+
+      <div class="comparison-row">
+        <div class="comparison-cell">
+          <span class="icon-badge cross">❌</span>
+          <span>Manual tracking &amp; slow interview updates over weeks.</span>
+        </div>
+        <div class="comparison-cell comparison-cell-jk">
+          <span class="icon-badge check">✓</span>
+          <span><strong>Direct Dashboard tracking</strong> with live stage updates and instant progress reports.</span>
+        </div>
+      </div>
+
+      <div class="comparison-row">
+        <div class="comparison-cell">
+          <span class="icon-badge cross">❌</span>
+          <span>Paper assessments or laggy external testing platforms.</span>
+        </div>
+        <div class="comparison-cell comparison-cell-jk">
+          <span class="icon-badge check">✓</span>
+          <span><strong>In-portal 30-min Aptitude Test</strong> with auto-submit and randomized question bank.</span>
+        </div>
+      </div>
+
+      <div class="comparison-row">
+        <div class="comparison-cell">
+          <span class="icon-badge cross">❌</span>
+          <span>Delayed result generation and manual script correction.</span>
+        </div>
+        <div class="comparison-cell comparison-cell-jk">
+          <span class="icon-badge check">✓</span>
+          <span><strong>Instant automatic evaluation</strong> and scorecard generation upon test completion.</span>
+        </div>
+      </div>
+
+      <div class="comparison-row">
+        <div class="comparison-cell">
+          <span class="icon-badge cross">❌</span>
+          <span>Static PDF resume templates with no interactive validation.</span>
+        </div>
+        <div class="comparison-cell comparison-cell-jk">
+          <span class="icon-badge check">✓</span>
+          <span><strong>Drag-and-drop resume upload</strong> with dynamic candidate profiling and preview.</span>
+        </div>
+      </div>
+
+      <div class="comparison-row">
+        <div class="comparison-cell">
+          <span class="icon-badge cross">❌</span>
+          <span>Manual email coordination with constant coordination delays.</span>
+        </div>
+        <div class="comparison-cell comparison-cell-jk">
+          <span class="icon-badge check">✓</span>
+          <span><strong>Automated interview booking</strong> - pick your own slot instantly from available HR hours.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FEATURE SHOWCASE PANEL ========== -->
+  <section class="section py-32" id="features">
+    <div class="section-header">
+      <span class="section-tag">Key Features</span>
+      <h2 class="section-title tracking-tighter">Everything you need, in <em>one place</em></h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">We build tools that make the recruitment workflow seamless, rapid, and entirely automated.</p>
+    </div>
+
+    <div class="feature-showcase-container">
+      
+      <!-- Panel 1 -->
+      <div class="feature-panel">
+        <div class="feature-media animate-fade-up">
+          <!-- Quiz Mock Card -->
+          <div class="card" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow-md);">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 16px;">
+              <span style="font-size: 0.72rem; font-weight: 700; color: #10b981; text-transform: uppercase;">⏱️ 00:29:45 Left</span>
+              <span class="badge badge-danger animate-pulse" style="font-size: 0.7rem;">⚠️ Webcam Monitoring</span>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 6px;">Question 12 of 30</div>
+            <h4 style="font-size: 0.95rem; font-weight: 700; line-height: 1.4; margin-bottom: 12px; color: var(--navy);">
+              A product company has 500 employees. If 60% are in software development and 20% in marketing, how many employees work in other departments?
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem;">
+              <div style="padding: 10px; border: 1px solid var(--border); border-radius: 6px; display: flex; align-items: center; gap: 10px;">
+                <input type="radio" disabled /> <span>A. 80 Employees</span>
+              </div>
+              <div style="padding: 10px; border: 1.5px solid var(--sky); background: rgba(16, 185, 129, 0.05); border-radius: 6px; display: flex; align-items: center; gap: 10px;">
+                <input type="radio" checked disabled /> <span style="font-weight: 600;">B. 100 Employees</span>
+              </div>
+              <div style="padding: 10px; border: 1px solid var(--border); border-radius: 6px; display: flex; align-items: center; gap: 10px;">
+                <input type="radio" disabled /> <span>C. 120 Employees</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="feature-text animate-fade-up" style="animation-delay: 0.1s">
+          <h2>Browser-Based Aptitude Testing</h2>
+          <p>
+            No external apps or software installations needed. Take our 30-minute randomized aptitude test covering Quantitative, Logical, and Verbal Ability directly from your browser.
+          </p>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">
+            Includes automatic anti-cheat measures monitoring screen switching, tab updates, and context transitions to ensure compliance.
+          </p>
+          <div>
+            <a href="register.html" class="btn btn-navy btn-rounded">Start Test Demo</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2 -->
+      <div class="feature-panel reverse">
+        <div class="feature-media animate-fade-up">
+          <!-- Scorecard Mock Card -->
+          <div class="card" style="width: 100%; text-align: center; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow-md); padding: 24px;">
+            <div style="width: 72px; height: 72px; border-radius: 50%; background: rgba(16, 185, 129, 0.1); border: 2px solid #10b981; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+              <span style="font-size: 28px; color: #059669;">83%</span>
+            </div>
+            <h4 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 6px; color: var(--navy);">Evaluation Qualified</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">Scorecard generated: candidate qualified for the next hiring stage.</p>
+            <div style="display: flex; flex-direction: column; gap: 8px; text-align: left; font-size: 0.8rem; background: var(--bg-alt); padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between;"><span>Correct Answers:</span><strong>25 / 30</strong></div>
+              <div style="display: flex; justify-content: space-between;"><span>Wrong Answers:</span><strong>5 / 30</strong></div>
+              <div style="display: flex; justify-content: space-between;"><span>Anti-Cheat Status:</span><strong style="color: #10b981;">0 Violations</strong></div>
+            </div>
+            <a href="dashboard.html" class="btn btn-primary btn-rounded btn-sm" style="width: 100%;">Book HR Interview Slot →</a>
+          </div>
+        </div>
+        <div class="feature-text animate-fade-up" style="animation-delay: 0.1s">
+          <h2>Instant Auto Evaluation</h2>
+          <p>
+            The second you click submit, your answers are cross-referenced with our secure answer key in real-time. Scorecards are created instantly, detailing correct, wrong, and skipped questions.
+          </p>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">
+            Candidates scoring 70%+ automatically unlock the next phase, bypass manual screening delays, and can proceed to HR round scheduling.
+          </p>
+          <div>
+            <a href="register.html" class="btn btn-navy btn-rounded">View My Dashboard</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 3 -->
+      <div class="feature-panel">
+        <div class="feature-media animate-fade-up">
+          <!-- Calendar Mock Card -->
+          <div class="card" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow-md);">
+            <div style="font-family: var(--font-heading); font-weight: 700; font-size: 0.9rem; color: var(--navy); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 14px;">
+              📅 Schedule Your Interview
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; text-align: center; margin-bottom: 12px;">
+              <div style="padding: 6px; font-size: 0.72rem; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-alt); color: var(--text-muted);">09:30 AM</div>
+              <div style="padding: 6px; font-size: 0.72rem; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-alt); color: var(--text-muted);">11:00 AM</div>
+              <div style="padding: 6px; font-size: 0.72rem; border-radius: 4px; border: 1.5px solid var(--sky); background: rgba(16, 185, 129, 0.08); font-weight: 700; color: var(--sky-dark);">02:30 PM</div>
+              <div style="padding: 6px; font-size: 0.72rem; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-card); cursor: pointer;">04:00 PM</div>
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">
+              Selected slot: <strong>June 05, 2026 at 02:30 PM</strong> with HR Panel 2.
+            </div>
+            <button class="btn btn-navy btn-rounded btn-sm" style="width: 100%;" disabled>Confirm Interview Slot</button>
+          </div>
+        </div>
+        <div class="feature-text animate-fade-up" style="animation-delay: 0.1s">
+          <h2>Self-Service Interview Booking</h2>
+          <p>
+            Tired of coordination delays and email threads? Eligible candidates can schedule interviews on their own terms. Choose your desired date and time from live available HR slots.
+          </p>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">
+            Once confirmed, our simulated email system triggers an instant confirmation notification with virtual panel links.
+          </p>
+          <div>
+            <a href="register.html" class="btn btn-navy btn-rounded">Start Onboarding</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== FAQ SECTION ========== -->
+  <section class="section bg-texture-dots" id="faq">
+    <div class="section-header">
+      <span class="section-tag">FAQ</span>
+      <h2 class="section-title tracking-tighter">Frequently Asked <em>Questions</em></h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">Everything you need to know about the JK Private Limited recruitment process.</p>
+    </div>
+
+    <div class="faq-accordion animate-fade-up">
+      <details class="faq-item" open>
+        <summary>How long does the aptitude test take?</summary>
+        <p>The aptitude test consists of 30 randomized multiple-choice questions and has a strict time limit of 30 minutes. Once you start, a countdown timer will display, and the test will auto-submit when the time expires.</p>
+      </details>
+      
+      <details class="faq-item">
+        <summary>Do I need to install any tracking software?</summary>
+        <p>No, there is no software to install. The secure testing portal runs entirely in your web browser. It features tab-focus monitoring and web-cam verification (simulated) to ensure anti-cheat compliance.</p>
+      </details>
+      
+      <details class="faq-item">
+        <summary>What is the passing score to qualify for interviews?</summary>
+        <p>You need to score 70% or higher (correctly answer at least 21 out of 30 questions) to qualify. Upon submitting the test, your score is evaluated instantly, and a scorecard is generated immediately on your dashboard.</p>
+      </details>
+      
+      <details class="faq-item">
+        <summary>How do I book my interview slot if I qualify?</summary>
+        <p>Qualified candidates will see an active "Schedule Interview" panel on their Candidate Dashboard. You can browse available live slots set by our HR panel and book your interview instantly with a single click.</p>
+      </details>
+      
+      <details class="faq-item">
+        <summary>Can I upload my resume after registration?</summary>
+        <p>Yes. During registration or at any time on your dashboard, you can upload your resume (PDF format, up to 5MB) using our drag-and-drop zone. You can preview or update your resume whenever needed.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ========== CONTACT HR ========== -->
+  <section class="section section-alt" id="contact">
+    <div class="section-header">
+      <span class="section-tag">Get in Touch</span>
+      <h2 class="section-title">Contact <span>HR Team</span></h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">Have questions about the recruitment process? We're always ready to help.</p>
+    </div>
+
+    <div class="contact-grid">
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div class="contact-item">
+          <div class="contact-icon-wrap">📧</div>
+          <div>
+            <div class="contact-label">Email HR</div>
+            <div class="contact-val">hr@jkpvtltd.com</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon-wrap">📞</div>
+          <div>
+            <div class="contact-label">HR Helpline</div>
+            <div class="contact-val">+91 98765 43210</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon-wrap">🕐</div>
+          <div>
+            <div class="contact-label">Working Hours</div>
+            <div class="contact-val">Mon – Sat, 9:30 AM – 6:30 PM</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon-wrap">📍</div>
+          <div>
+            <div class="contact-label">Head Office</div>
+            <div class="contact-val">JK Tech Park, Sector 62, Noida – 201301</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form">
+        <h3>Send a Message</h3>
+        <form onsubmit="submitContact(event)">
+          <div class="grid-2" style="gap:16px">
+            <div class="form-group">
+              <label class="form-label">Your Name</label>
+              <input type="text" class="form-control" placeholder="Full name" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-control" placeholder="your@email.com" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Subject</label>
+            <input type="text" class="form-control" placeholder="e.g. Recruitment query" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-control" rows="4" placeholder="Write your message here..." required style="resize:vertical"></textarea>
+          </div>
+          <button type="submit" class="btn btn-navy" style="width:100%">Send Message ✉️</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer glassmorphic border-t border-border/40 relative shadow-md">
+    <div class="footer-sky-bar" style="background: linear-gradient(90deg, var(--gradient-forest-start), var(--gradient-forest-end));"></div>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:14px;width:48px;height:48px;font-size:18px">JK</div>
+        <div style="font-family:var(--font-heading);font-weight:800;font-size:1.1rem;color:var(--text);margin-bottom:6px">JK Private Limited</div>
+        <p style="color: var(--text-muted);">Building Innovative Government and Enterprise Solutions since 2010. Trusted by 12 state governments across India.</p>
+      </div>
+      <div class="footer-links">
+        <h4 style="color: var(--text);">Company</h4>
+        <a href="#about" style="color: var(--text-muted);">About Us</a>
+        <a href="#comparison" style="color: var(--text-muted);">Our Portal</a>
+        <a href="#features" style="color: var(--text-muted);">Key Features</a>
+        <a href="#contact" style="color: var(--text-muted);">Contact HR</a>
+      </div>
+      <div class="footer-links">
+        <h4 style="color: var(--text);">Candidates</h4>
+        <a href="register.html" style="color: var(--text-muted);">New Registration</a>
+        <a href="login.html" style="color: var(--text-muted);">Candidate Login</a>
+        <a href="test.html" style="color: var(--text-muted);">Take Test</a>
+        <a href="dashboard.html" style="color: var(--text-muted);">My Dashboard</a>
+      </div>
+      <div class="footer-links">
+        <h4 style="color: var(--text);">Contact</h4>
+        <a href="mailto:hr@jkpvtltd.com" style="color: var(--text-muted);">hr@jkpvtltd.com</a>
+        <a href="tel:+919876543210" style="color: var(--text-muted);">+91 98765 43210</a>
+        <span style="color: var(--text-muted);">Sector 62, Noida, UP</span>
+        <span style="color: var(--text-muted);">India – 201301</span>
+        <a href="admin.html" style="margin-top:8px;color:var(--text-light);font-size:0.78rem">Admin Portal →</a>
+      </div>
+    </div>
+    <div class="footer-bottom" style="border-top-color: var(--border); color: var(--text-light);">
+      © 2025 JK Private Limited. All rights reserved. &nbsp;|&nbsp; CIN: U72900UP2010PTC041234
+    </div>
+  </footer>
+
+  <div id="toast-container"></div>
+  <script src="nav.js"></script>
+  <script src="app.js"></script>
+  <script>
+    function toggleNav() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+
+    function submitContact(e) {
+      e.preventDefault();
+      APP.toast('✉️ Message sent! HR will respond within 2 business days.', 'success');
+      e.target.reset();
+    }
+
+    function handleHeroSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('hero-email').value;
+      if (email) {
+        window.location.href = `register.html?email=${encodeURIComponent(email)}`;
+      }
+    }
+
+    // Intersection Observer for scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(el => {
+        if (el.isIntersecting) el.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll(
+      '.project-card, .why-card, .process-step, .about-item, .contact-item, .feature-panel, .comparison-grid'
+    ).forEach(el => observer.observe(el));
+
+    // Navbar shadow on scroll
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Check session — update CTA
+    document.addEventListener('DOMContentLoaded', () => {
+      const session = APP.session.getCandidate();
+      if (session) {
+        const container = document.getElementById('hero-action-container');
+        if (container) {
+          container.innerHTML = `
+            <a href="dashboard.html" class="btn btn-navy btn-rounded btn-lg animate-fade-up">📊 Go to Candidate Dashboard</a>
+            <p class="text-sm text-muted-foreground mt-3 text-center">Logged in as ${session.fullName}</p>
+          `;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

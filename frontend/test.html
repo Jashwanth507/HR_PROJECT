@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aptitude Test – JK Private Limited</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background: var(--bg); }
+    .test-layout { display: flex; min-height: 100vh; padding-top: 70px; }
+    /* SIDEBAR */
+    .test-sidebar {
+      width: 280px; background: var(--surface); border-right: 1px solid var(--border);
+      padding: 20px 16px; position: fixed; top: 70px; bottom: 0; left: 0;
+      overflow-y: auto; display: flex; flex-direction: column; gap: 16px;
+    }
+    .timer-box {
+      background: var(--dark-section-bg);
+      border: 1px solid var(--border); border-radius: var(--radius-md);
+      padding: 16px; text-align: center;
+    }
+    .timer-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+    .timer-display { font-family: var(--font-heading); font-size: 2.4rem; font-weight: 800; color: var(--white); letter-spacing: 3px; }
+    .timer-display.warning { color: #f59e0b; }
+    .timer-display.danger { color: #ef4444; animation: pulse 1s infinite; }
+    .q-nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .q-nav-btn {
+      width: 100%; aspect-ratio: 1; border-radius: 8px; border: none;
+      font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: var(--transition);
+      background: var(--surface2); color: var(--text-muted);
+    }
+    .q-nav-btn.answered { background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid rgba(16,185,129,0.4); }
+    .q-nav-btn.current { background: var(--accent); color: white; }
+    .q-nav-btn.skipped { background: rgba(245,158,11,0.15); color: #f59e0b; }
+    .nav-legend { display: flex; flex-direction: column; gap: 6px; font-size: 0.8rem; color: var(--text-muted); }
+    .legend-item { display: flex; align-items: center; gap: 8px; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+    .legend-green { background: rgba(16,185,129,0.5); }
+    .legend-blue { background: var(--accent); }
+    .legend-yellow { background: rgba(245,158,11,0.4); }
+    .legend-gray { background: var(--surface2); border: 1px solid var(--border); }
+    /* MAIN AREA */
+    .test-main { flex: 1; margin-left: 280px; padding: 32px; max-width: calc(100% - 280px); }
+    .test-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border);
+    }
+    .test-progress { flex: 1; margin: 0 24px; }
+    .test-progress-label { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 6px; }
+    .q-category { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-light); margin-bottom: 8px; }
+    .question-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 36px; margin-bottom: 24px;
+      animation: fadeInUp 0.3s ease;
+    }
+    .q-number { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px; }
+    .q-text { font-size: 1.1rem; font-weight: 600; color: var(--text); line-height: 1.6; margin-bottom: 28px; }
+    .options-list { display: flex; flex-direction: column; gap: 12px; }
+    .option-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px; border-radius: var(--radius-md);
+      border: 2px solid var(--border); cursor: pointer;
+      transition: var(--transition); background: var(--surface2);
+    }
+    .option-item:hover { border-color: var(--accent); background: var(--bg-alt); }
+    .option-item.selected { border-color: var(--accent); background: var(--border); }
+    .option-letter {
+      width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.82rem; font-weight: 700; flex-shrink: 0;
+      transition: var(--transition); color: var(--text-muted);
+    }
+    .option-item.selected .option-letter { background: var(--accent); border-color: var(--accent); color: var(--btn-primary-text); }
+    .option-text { font-size: 0.95rem; color: var(--text); }
+    .test-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px; background: var(--surface); border-radius: var(--radius-md);
+      border: 1px solid var(--border); margin-top: 8px;
+    }
+    .test-actions { display: flex; gap: 12px; }
+    /* FULLSCREEN BTN */
+    .fullscreen-btn {
+      padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border);
+      background: var(--surface2); color: var(--text-muted); cursor: pointer;
+      font-size: 0.85rem; transition: var(--transition);
+    }
+    .fullscreen-btn:hover { background: var(--accent); color: var(--btn-primary-text); border-color: var(--accent); }
+    /* START OVERLAY */
+    .start-overlay {
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(0,0,0,0.95); backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+    }
+    .start-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 48px; max-width: 560px;
+      width: 100%; text-align: center; animation: modalIn 0.4s ease;
+    }
+    .start-box h2 { font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; margin-bottom: 12px; }
+    .rules-list { text-align: left; margin: 24px 0; display: flex; flex-direction: column; gap: 10px; }
+    .rule-item { display: flex; gap: 10px; font-size: 0.9rem; color: var(--text-muted); }
+    .rule-icon { flex-shrink: 0; }
+    /* RESULT OVERLAY */
+    .result-overlay {
+      display: none; position: fixed; inset: 0; z-index: 3000;
+      background: rgba(0,0,0,0.95); align-items: center; justify-content: center;
+      padding: 20px; overflow-y: auto;
+    }
+    .result-overlay.active { display: flex; }
+    .result-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 48px; max-width: 600px;
+      width: 100%; text-align: center; animation: modalIn 0.4s ease;
+    }
+    .score-circle {
+      width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 24px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      border: 6px solid; position: relative;
+    }
+    .score-circle.qualified { border-color: #10b981; background: rgba(16,185,129,0.1); }
+    .score-circle.rejected { border-color: #ef4444; background: rgba(239,68,68,0.1); }
+    .score-pct { font-family: var(--font-heading); font-size: 2.4rem; font-weight: 900; }
+    .score-circle.qualified .score-pct { color: #10b981; }
+    .score-circle.rejected .score-pct { color: #ef4444; }
+    .score-lbl { font-size: 0.78rem; color: var(--text-muted); }
+    .result-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0; }
+    .result-stat { background: var(--surface2); border-radius: var(--radius-md); padding: 16px; }
+    .result-stat-val { font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; }
+    .result-stat-lbl { font-size: 0.78rem; color: var(--text-muted); }
+    .qualified-banner { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); border-radius: var(--radius-md); padding: 16px; margin: 16px 0; }
+    .rejected-banner { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: var(--radius-md); padding: 16px; margin: 16px 0; }
+    @media(max-width:900px){ .test-sidebar{display:none;} .test-main{margin-left:0;max-width:100%;padding:16px;} }
+  </style>
+</head>
+<body>
+  <nav class="navbar glassmorphic shadow-sm sticky top-0 z-50">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo">JK</div>
+      <span class="nav-name">JK Private Limited</span>
+    </a>
+    <div class="nav-actions">
+      <button class="fullscreen-btn btn-rounded" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px; z-index: 1001;">
+      <button class="theme-toggle" onclick="APP.theme.toggle()">🌙</button>
+    </div>
+  </nav>
+
+  <!-- START OVERLAY -->
+  <div class="start-overlay" id="startOverlay">
+    <div class="start-box">
+      <div style="font-size:2.5rem;margin-bottom:16px">🧠</div>
+      <h2>Aptitude Test — Round 1</h2>
+      <p style="color:var(--text-muted);margin-bottom:4px">30 Questions &nbsp;|&nbsp; 30 Minutes &nbsp;|&nbsp; Multiple Choice</p>
+      <div class="rules-list">
+        <div class="rule-item"><span class="rule-icon">⏱️</span><span>Timer starts immediately when you click Begin. Auto-submits when time runs out.</span></div>
+        <div class="rule-item"><span class="rule-icon">📵</span><span>Do not switch tabs or minimize the window — this will be flagged as a violation.</span></div>
+        <div class="rule-item"><span class="rule-icon">✅</span><span>Each correct answer carries 1 mark. No negative marking.</span></div>
+        <div class="rule-item"><span class="rule-icon">🎯</span><span>Score 70% or above to qualify for the HR Interview round.</span></div>
+        <div class="rule-item"><span class="rule-icon">🔒</span><span>No copy-paste, right-click, or developer tools allowed during the test.</span></div>
+      </div>
+      <div id="candidate-info-box" style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:24px;text-align:left;font-size:0.9rem;"></div>
+      <button class="btn btn-primary btn-lg" onclick="beginTest()" style="width:100%">Begin Test →</button>
+    </div>
+  </div>
+
+  <!-- RESULT OVERLAY -->
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-box">
+      <div id="result-icon" style="font-size:2.5rem;margin-bottom:16px"></div>
+      <h2 style="font-family:var(--font-heading);font-size:1.6rem;font-weight:800;margin-bottom:8px" id="result-title"></h2>
+      <div id="score-circle-wrap"></div>
+      <div class="result-stats">
+        <div class="result-stat"><div class="result-stat-val" id="r-correct" style="color:#10b981"></div><div class="result-stat-lbl">Correct</div></div>
+        <div class="result-stat"><div class="result-stat-val" id="r-wrong" style="color:#ef4444"></div><div class="result-stat-lbl">Wrong</div></div>
+        <div class="result-stat"><div class="result-stat-val" id="r-skipped" style="color:#f59e0b"></div><div class="result-stat-lbl">Skipped</div></div>
+      </div>
+      <div id="result-banner"></div>
+      <p id="result-msg" style="color:var(--text-muted);font-size:0.9rem;margin-bottom:24px"></p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a href="dashboard.html" class="btn btn-primary">Go to Dashboard →</a>
+        <button onclick="APP.export.toPDF(currentCandidate?.id)" class="btn btn-outline">📄 Download Report</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="test-layout">
+    <!-- SIDEBAR -->
+    <aside class="test-sidebar">
+      <div class="timer-box">
+        <div class="timer-label">⏱ Time Remaining</div>
+        <div class="timer-display" id="timerDisplay">30:00</div>
+      </div>
+      <div>
+        <div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:10px">Question Navigator</div>
+        <div class="q-nav-grid" id="qNavGrid"></div>
+      </div>
+      <div class="nav-legend">
+        <div class="legend-item"><div class="legend-dot legend-green"></div>Answered</div>
+        <div class="legend-item"><div class="legend-dot legend-blue"></div>Current</div>
+        <div class="legend-item"><div class="legend-dot legend-yellow"></div>Skipped</div>
+        <div class="legend-item"><div class="legend-dot legend-gray"></div>Not Visited</div>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="confirmSubmit()" style="margin-top:auto">Submit Test</button>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="test-main">
+      <div class="test-header">
+        <div>
+          <div style="font-weight:700;font-size:1rem" id="candidateName">Loading...</div>
+          <div style="font-size:0.82rem;color:var(--text-muted)" id="candidateId"></div>
+        </div>
+        <div class="test-progress">
+          <div class="test-progress-label">
+            <span id="progressText">Question 1 of 30</span>
+            <span id="answeredCount">0 answered</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:3.33%"></div></div>
+        </div>
+        <div style="font-size:0.82rem;color:var(--text-muted);white-space:nowrap">Violations: <span id="violationCount" style="color:#f59e0b">0</span>/3</div>
+      </div>
+
+      <div id="questionArea"></div>
+
+      <div class="test-footer">
+        <button class="btn btn-outline btn-sm" onclick="prevQuestion()" id="prevBtn" disabled>← Previous</button>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-sm" style="background:var(--surface2);color:var(--text-body);border:1px solid var(--border)" onclick="markSkipped()">Mark &amp; Skip</button>
+          <span style="font-size:0.82rem;color:var(--text-muted)" id="footerQ">Q1/30</span>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="nextQuestion()" id="nextBtn">Next →</button>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="nav.js"></script>
+  <script src="app.js"></script>
+  <script src="questions.js"></script>
+  <script>
+    let currentQ = 0, questions = [], answers = [], skipped = [], timer, timeLeft = APP.TEST_DURATION;
+    let currentCandidate = null, testStarted = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      currentCandidate = APP.session.getCandidate();
+      if (!currentCandidate) { window.location.href = 'register.html'; return; }
+
+      const existing = APP.results.findByCandidateId(currentCandidate.id);
+      if (existing) { window.location.href = 'dashboard.html'; return; }
+
+      document.getElementById('candidate-info-box').innerHTML =
+        `<strong>${currentCandidate.fullName}</strong><br>
+         <span style="color:var(--text-muted)">${currentCandidate.college} &nbsp;|&nbsp; ${currentCandidate.department}</span><br>
+         <span style="color:var(--text-muted);font-size:0.85rem">ID: ${currentCandidate.id}</span>`;
+
+      questions = getRandomQuestions(APP.TOTAL_QUESTIONS);
+      answers = new Array(questions.length).fill(null);
+      skipped = new Array(questions.length).fill(false);
+      buildNavGrid();
+    });
+
+    function buildNavGrid() {
+      const grid = document.getElementById('qNavGrid');
+      grid.innerHTML = questions.map((_, i) =>
+        `<button class="q-nav-btn ${i === 0 ? 'current' : ''}" id="nav-${i}" onclick="goTo(${i})">${i+1}</button>`
+      ).join('');
+    }
+
+    function beginTest() {
+      document.getElementById('startOverlay').style.display = 'none';
+      document.getElementById('candidateName').textContent = currentCandidate.fullName;
+      document.getElementById('candidateId').textContent = 'ID: ' + currentCandidate.id;
+      testStarted = true;
+      renderQuestion();
+      startTimer();
+      APP.antiCheat.init((reason) => {
+        if (reason === 'max_violations') autoSubmit('violations');
+      });
+    }
+
+    function renderQuestion() {
+      const q = questions[currentQ];
+      const letters = ['A', 'B', 'C', 'D'];
+      document.getElementById('questionArea').innerHTML = `
+        <div class="question-card">
+          <div class="q-category">${q.category} — ${q.subcategory}</div>
+          <div class="q-number">Question ${currentQ + 1} of ${questions.length}</div>
+          <div class="q-text">${q.question}</div>
+          <div class="options-list">
+            ${q.options.map((opt, i) => `
+              <div class="option-item ${answers[currentQ] === i ? 'selected' : ''}" onclick="selectAnswer(${i})" id="opt-${i}">
+                <div class="option-letter">${letters[i]}</div>
+                <div class="option-text">${opt}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>`;
+      updateNav(); updateProgress();
+      document.getElementById('prevBtn').disabled = currentQ === 0;
+      document.getElementById('nextBtn').textContent = currentQ === questions.length - 1 ? 'Submit ✓' : 'Next →';
+      document.getElementById('footerQ').textContent = `Q${currentQ+1}/${questions.length}`;
+    }
+
+    function selectAnswer(idx) {
+      answers[currentQ] = idx;
+      skipped[currentQ] = false;
+      document.querySelectorAll('.option-item').forEach((el, i) => {
+        el.classList.toggle('selected', i === idx);
+        el.querySelector('.option-letter').style.background = i === idx ? 'var(--accent)' : '';
+        el.querySelector('.option-letter').style.color = i === idx ? 'white' : '';
+        el.querySelector('.option-letter').style.borderColor = i === idx ? 'var(--accent)' : '';
+      });
+      updateNav(); updateProgress();
+      saveProgress();
+    }
+
+    function updateNav() {
+      questions.forEach((_, i) => {
+        const btn = document.getElementById('nav-' + i);
+        if (!btn) return;
+        btn.className = 'q-nav-btn';
+        if (i === currentQ) btn.classList.add('current');
+        else if (answers[i] !== null) btn.classList.add('answered');
+        else if (skipped[i]) btn.classList.add('skipped');
+      });
+    }
+
+    function updateProgress() {
+      const answered = answers.filter(a => a !== null).length;
+      const pct = ((currentQ + 1) / questions.length * 100).toFixed(1);
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('progressText').textContent = `Question ${currentQ+1} of ${questions.length}`;
+      document.getElementById('answeredCount').textContent = `${answered} answered`;
+    }
+
+    function nextQuestion() {
+      if (currentQ < questions.length - 1) { currentQ++; renderQuestion(); }
+      else confirmSubmit();
+    }
+
+    function prevQuestion() { if (currentQ > 0) { currentQ--; renderQuestion(); } }
+    function goTo(idx) { currentQ = idx; renderQuestion(); }
+    function markSkipped() { skipped[currentQ] = true; updateNav(); if (currentQ < questions.length - 1) { currentQ++; renderQuestion(); } }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        timeLeft--;
+        const el = document.getElementById('timerDisplay');
+        el.textContent = APP.utils.formatDuration(timeLeft);
+        el.className = 'timer-display';
+        if (timeLeft <= 300) el.classList.add('warning');
+        if (timeLeft <= 60) el.classList.add('danger');
+        if (timeLeft <= 0) { clearInterval(timer); autoSubmit('timeout'); }
+      }, 1000);
+    }
+
+    function saveProgress() {
+      APP.storage.set('test_progress', { answers, currentQ, timeLeft });
+    }
+
+    function confirmSubmit() {
+      const answered = answers.filter(a => a !== null).length;
+      const unanswered = questions.length - answered;
+      if (unanswered > 0) {
+        if (!confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`)) return;
+      }
+      submitTest();
+    }
+
+    function autoSubmit(reason) {
+      if (reason === 'timeout') APP.toast('⏱ Time\'s up! Submitting automatically...', 'warning', 3000);
+      if (reason === 'violations') APP.toast('🚫 Max violations reached. Submitting...', 'error', 3000);
+      setTimeout(submitTest, 1500);
+    }
+
+    function submitTest() {
+      clearInterval(timer);
+      if (!testStarted) return;
+      testStarted = false;
+      const evaluation = APP.evaluate(questions, answers);
+      const result = {
+        candidateId: currentCandidate.id,
+        ...evaluation,
+        submittedAt: new Date().toISOString(),
+        timeTaken: APP.TEST_DURATION - timeLeft,
+        violations: APP.antiCheat.violations
+      };
+      // Save detailed responses sheet (CandidateResponses Table) first to cache
+      let responsesSheet = null;
+      if (APP.responses) {
+        responsesSheet = {
+          candidateId: currentCandidate.id,
+          answers: questions.map((q, i) => ({
+            questionId: q.id,
+            category: q.category,
+            subcategory: q.subcategory,
+            question: q.question,
+            options: q.options,
+            selected: answers[i], // index of selected option, or null
+            correct: q.answer, // index of correct option
+            isCorrect: answers[i] === q.answer,
+            explanation: q.explanation || ''
+          })),
+          submittedAt: new Date().toISOString()
+        };
+        APP.responses.add(responsesSheet);
+      }
+
+      APP.results.add(result);
+      APP.candidates.update(currentCandidate.id, { testStatus: result.qualified ? 'qualified' : 'rejected' });
+
+      // Send Test Results email
+      if (APP.emails) {
+        if (result.qualified) {
+          APP.emails.send(
+            currentCandidate.email,
+            "Congratulations! You Qualified Round 1 Aptitude Test",
+            `<h3>Aptitude Test Results - Round 1 Qualified!</h3>
+             <p>Dear ${currentCandidate.fullName},</p>
+             <p>Congratulations! We are pleased to inform you that you have cleared Round 1 (Online Aptitude Test) of the JK Private Limited fresher recruitment drive.</p>
+             <p>Here is your test performance summary:</p>
+             <ul>
+               <li><strong>Overall Score:</strong> ${result.score}%</li>
+               <li><strong>Correct Answers:</strong> ${result.correct} / ${result.total}</li>
+               <li><strong>Status:</strong> QUALIFIED</li>
+             </ul>
+             <p><strong>Next Steps: HR Interview</strong><br>
+             You are now invited to select your preferred slot for the HR Interview round. Interviews can be taken Online (video call) or Offline at our Noida Head Office.</p>
+             <p>Please log in to your dashboard to schedule your slot:</p>
+             <p><a href="dashboard.html" style="background:#0ea5e9;color:white;padding:10px 22px;text-decoration:none;border-radius:24px;display:inline-block;margin-top:10px;font-weight:bold">Schedule HR Interview Now →</a></p>
+             <p>Best regards,<br>JK Human Resources Team</p>`
+          );
+        } else {
+          APP.emails.send(
+            currentCandidate.email,
+            "Aptitude Test Results - JK Placements",
+            `<h3>Aptitude Test Results Summary</h3>
+             <p>Dear ${currentCandidate.fullName},</p>
+             <p>Thank you for taking the online aptitude test for fresher placements at JK Private Limited.</p>
+             <p>We regret to inform you that your score of ${result.score}% did not meet our qualifying threshold of 70%. Consequently, we will not be able to proceed with your application for the interview round.</p>
+             <p>We appreciate your interest in JK Private Limited and wish you all the best in your future endeavors.</p>
+             <p>Best regards,<br>JK Recruitment Team</p>`
+          );
+        }
+      }
+
+      APP.storage.remove('test_progress');
+      showResult(result);
+    }
+
+    function showResult(r) {
+      const overlay = document.getElementById('resultOverlay');
+      overlay.classList.add('active');
+      document.getElementById('result-icon').textContent = r.qualified ? '🎉' : '😔';
+      document.getElementById('result-title').textContent = r.qualified ? 'Congratulations! You Qualified!' : 'Test Completed';
+      document.getElementById('score-circle-wrap').innerHTML = `
+        <div class="score-circle ${r.qualified ? 'qualified' : 'rejected'}" style="margin-bottom:20px">
+          <div class="score-pct">${r.score}%</div>
+          <div class="score-lbl">${r.correct}/${r.total}</div>
+        </div>`;
+      document.getElementById('r-correct').textContent = r.correct;
+      document.getElementById('r-wrong').textContent = r.wrong;
+      document.getElementById('r-skipped').textContent = r.skipped;
+      document.getElementById('result-banner').innerHTML = r.qualified
+        ? `<div class="qualified-banner"><strong style="color:#10b981">✅ QUALIFIED</strong><p style="color:var(--text-muted);font-size:0.88rem;margin-top:6px">You have cleared Round 1. Please schedule your HR Interview from the dashboard.</p></div>`
+        : `<div class="rejected-banner"><strong style="color:#ef4444">❌ NOT QUALIFIED</strong><p style="color:var(--text-muted);font-size:0.88rem;margin-top:6px">You needed 70% to qualify. Thank you for participating. Better luck next time!</p></div>`;
+      document.getElementById('result-msg').textContent = `Time taken: ${APP.utils.formatDuration(APP.TEST_DURATION - timeLeft)} | Violations: ${APP.antiCheat.violations}`;
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+      else document.exitFullscreen?.();
+    }
+  </script>
+</body>
+</html>

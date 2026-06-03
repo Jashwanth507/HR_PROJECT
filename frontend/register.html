@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Candidate Registration – JK Private Limited</title>
+  <meta name="description" content="Register for JK Private Limited campus recruitment. Fill in your academic details to begin the aptitude test." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .register-page { min-height: 100vh; display: flex; align-items: stretch; padding-top: 70px; }
+    .register-left {
+      flex: 1; background: var(--dark-section-bg);
+      padding: 60px 48px; display: flex; flex-direction: column; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .register-left::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+      background-size: 34px 34px;
+    }
+    .register-left-content { position: relative; z-index: 1; }
+    .register-left h2 { font-family: var(--font-heading); font-size: 1.9rem; font-weight: 900; color: white; margin-bottom: 14px; letter-spacing:-0.5px; }
+    .register-left p { color: rgba(255,255,255,0.55); font-size: 0.92rem; line-height: 1.8; margin-bottom: 32px; }
+    .register-steps { display: flex; flex-direction: column; gap: 16px; }
+    .register-step { display: flex; align-items: center; gap: 14px; }
+    .step-circle {
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      background: var(--navy-mid);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.85rem; color: var(--btn-primary-text);
+    }
+    .step-text { color: rgba(255,255,255,0.65); font-size: 0.9rem; }
+    .register-orb {
+      position: absolute; width: 350px; height: 350px; border-radius: 50%;
+      background: var(--orb-1); filter: blur(80px);
+      bottom: -50px; right: -80px;
+    }
+    .register-right {
+      flex: 1.2; background: var(--bg-alt); padding: 48px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .register-form-wrapper { max-width: 580px; width: 100%; }
+    .register-header { margin-bottom: 32px; }
+    .register-header h1 { font-family: var(--font-heading); font-size: 1.8rem; font-weight: 900; color: var(--text); margin-bottom: 8px; letter-spacing:-0.5px; }
+    .register-header p { color: var(--text-muted); font-size: 0.95rem; }
+    .already-link { color: var(--sky-dark); text-decoration: none; font-weight: 600; }
+    .already-link:hover { text-decoration: underline; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .cgpa-hint { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+    .consent-row { display: flex; align-items: flex-start; gap: 10px; margin: 16px 0; }
+    .consent-row input { margin-top: 3px; accent-color: var(--accent); }
+    .consent-row label { font-size: 0.88rem; color: var(--text-muted); }
+    .register-submit { width: 100%; padding: 14px; font-size: 1rem; }
+    .success-overlay {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+    }
+    .success-overlay.active { display: flex; }
+    .success-box {
+      background: var(--surface); border-radius: var(--radius-xl);
+      border: 1px solid var(--border); padding: 48px; text-align: center;
+      max-width: 480px; animation: modalIn 0.4s ease;
+    }
+    .success-icon { font-size: 4rem; margin-bottom: 20px; }
+    .success-box h2 { font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; margin-bottom: 12px; }
+    .candidate-id-badge {
+      display: inline-block; padding: 10px 24px; border-radius: var(--radius-md);
+      background: var(--sky-light); border: 1px solid rgba(51,190,254,0.3);
+      font-family: monospace; font-size: 1.2rem; font-weight: 700; color: var(--sky-dark);
+      margin: 16px 0; letter-spacing: 2px;
+    }
+    @media (max-width: 900px) {
+      .register-page { flex-direction: column; }
+      .register-left { padding: 40px 5%; }
+      .register-right { padding: 40px 5%; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar glassmorphic shadow-sm sticky top-0 z-50">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo">JK</div>
+      <span class="nav-name">JK Private Limited</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="index.html#process">Process</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="admin.html" class="mobile-only-nav-link">Admin Portal</a>
+    </div>
+    <div class="nav-actions">
+      <a href="admin.html" class="btn-nav btn-nav-outline btn-rounded">Admin</a>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px; z-index: 1001;">
+      <button class="theme-toggle" onclick="APP.theme.toggle()">🌙</button>
+      <div class="hamburger" id="hamburger" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="register-page">
+    <!-- LEFT PANEL -->
+    <div class="register-left">
+      <div class="register-left-content">
+        <div class="nav-logo" style="margin-bottom:20px;width:52px;height:52px;font-size:20px">JK</div>
+        <h2>Start Your Career at JK Private Limited</h2>
+        <p>Complete your registration to access the aptitude test. It takes less than 2 minutes. Once registered, you can log back in anytime using your email.</p>
+        <div class="register-steps">
+          <div class="register-step"><div class="step-circle">1</div><span class="step-text">Fill in your personal &amp; academic details</span></div>
+          <div class="register-step"><div class="step-circle">2</div><span class="step-text">Take the 30-minute online aptitude test</span></div>
+          <div class="register-step"><div class="step-circle">3</div><span class="step-text">Get instant results and qualify for HR interview</span></div>
+        </div>
+      </div>
+      <div class="register-orb"></div>
+    </div>
+
+    <!-- RIGHT FORM PANEL -->
+    <div class="register-right">
+      <div class="register-form-wrapper">
+        <div class="register-header">
+          <h1>Candidate Registration</h1>
+          <p>Already registered? <a href="login.html" class="already-link">Log in to your dashboard →</a></p>
+        </div>
+
+        <form id="registerForm" onsubmit="handleRegister(event)" novalidate>
+          <div class="form-row">
+            <div class="form-group" id="fg-fullName">
+              <label class="form-label">Full Name *</label>
+              <input type="text" id="fullName" class="form-control" placeholder="e.g. Rahul Kumar Sharma" autocomplete="name" />
+              <span class="form-error">Please enter your full name (min 3 characters)</span>
+            </div>
+            <div class="form-group" id="fg-email">
+              <label class="form-label">Email Address *</label>
+              <input type="email" id="email" class="form-control" placeholder="your@email.com" autocomplete="email" />
+              <span class="form-error" id="err-email">Please enter a valid email address</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group" id="fg-phone">
+              <label class="form-label">Phone Number *</label>
+              <input type="tel" id="phone" class="form-control" placeholder="10-digit mobile number" maxlength="10" />
+              <span class="form-error">Enter a valid 10-digit Indian mobile number</span>
+            </div>
+            <div class="form-group" id="fg-graduation">
+              <label class="form-label">Graduation Year *</label>
+              <select id="graduation" class="form-control">
+                <option value="">Select Year</option>
+                <option>2023</option><option>2024</option><option>2025</option><option>2026</option><option>2027</option>
+              </select>
+              <span class="form-error">Please select your graduation year</span>
+            </div>
+          </div>
+          <div class="form-group" id="fg-college">
+            <label class="form-label">College / University Name *</label>
+            <input type="text" id="college" class="form-control" placeholder="e.g. Delhi Technological University" />
+            <span class="form-error">Please enter your college name</span>
+          </div>
+          <div class="form-row">
+            <div class="form-group" id="fg-department">
+              <label class="form-label">Department / Branch *</label>
+              <select id="department" class="form-control">
+                <option value="">Select Department</option>
+                <option>Computer Science Engineering</option>
+                <option>Information Technology</option>
+                <option>Electronics &amp; Communication</option>
+                <option>Electrical Engineering</option>
+                <option>Mechanical Engineering</option>
+                <option>Civil Engineering</option>
+                <option>Data Science</option>
+                <option>Artificial Intelligence &amp; ML</option>
+                <option>MCA</option>
+                <option>BCA</option>
+                <option>BSc Computer Science</option>
+                <option>Other</option>
+              </select>
+              <span class="form-error">Please select your department</span>
+            </div>
+            <div class="form-group" id="fg-cgpa">
+              <label class="form-label">CGPA / Percentage *</label>
+              <input type="number" id="cgpa" class="form-control" placeholder="e.g. 8.5" min="0" max="100" step="0.01" />
+              <span class="form-error" id="err-cgpa">Enter CGPA (0–10) or percentage (0–100)</span>
+              <div class="cgpa-hint">Enter CGPA out of 10, or percentage out of 100</div>
+            </div>
+          </div>
+          <div class="form-group" id="fg-resume">
+            <label class="form-label">Resume / Curriculum Vitae (PDF/Doc) *</label>
+            <div class="resume-upload-zone" id="resumeDropZone">
+              <div class="resume-upload-icon">📁</div>
+              <div class="resume-upload-text">Drag &amp; drop your resume file here or <strong>browse files</strong></div>
+              <div class="resume-upload-subtext">Supports PDF, DOC, DOCX up to 5MB</div>
+              <input type="file" id="resumeFileInput" style="display:none" accept=".pdf,.doc,.docx" />
+            </div>
+            <div class="resume-preview-box" id="resumePreviewBox" style="display:none">
+              <div class="resume-preview-info">
+                <span class="resume-preview-icon">📄</span>
+                <div>
+                  <div class="resume-preview-name" id="resumeName">resume.pdf</div>
+                  <div class="resume-preview-size" id="resumeSize">0 KB</div>
+                </div>
+              </div>
+              <button type="button" class="resume-preview-delete" id="resumeDeleteBtn">&times;</button>
+            </div>
+            <span class="form-error" id="err-resume">Please upload your resume in PDF or Word format</span>
+          </div>
+
+          <div class="consent-row">
+            <input type="checkbox" id="consent" />
+            <label for="consent">I agree to the <a href="#" class="already-link">Terms &amp; Conditions</a> and confirm that all information provided is accurate and truthful.</label>
+          </div>
+          <div id="form-alert"></div>
+          <button type="submit" class="btn btn-primary register-submit" id="submitBtn">
+            Create Account &amp; Continue →
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS OVERLAY -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-box">
+      <div class="success-icon">🎉</div>
+      <h2>Registration Successful!</h2>
+      <p style="color:var(--text-muted);margin-bottom:12px">Your Candidate ID is:</p>
+      <div class="candidate-id-badge" id="candidateIdDisplay"></div>
+      <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:24px">Please save this ID. You'll use it to access your dashboard and results.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a href="test.html" class="btn btn-primary">Start Aptitude Test →</a>
+        <a href="dashboard.html" class="btn btn-outline">Go to Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="nav.js"></script>
+  <script src="app.js"></script>
+  <script>
+    let uploadedResume = null;
+    let uploadedResumeFile = null;
+
+    function validate(id, condition, errId) {
+      const fg = document.getElementById('fg-' + id) || document.getElementById(id)?.closest('.form-group');
+      const isValid = condition;
+      if (fg) fg.classList.toggle('error', !isValid);
+      return isValid;
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const graduation = document.getElementById('graduation').value;
+      const college = document.getElementById('college').value.trim();
+      const department = document.getElementById('department').value;
+      const cgpaRaw = parseFloat(document.getElementById('cgpa').value);
+      const consent = document.getElementById('consent').checked;
+
+      let valid = true;
+      if (!validate('fullName', fullName.length >= 3)) valid = false;
+
+      const emailOk = APP.utils.validateEmail(email);
+      const emailExists = emailOk && APP.candidates.findByEmail(email);
+      if (!validate('email', emailOk && !emailExists)) {
+        if (emailExists) {
+          document.getElementById('err-email').textContent = 'This email is already registered. Try logging in.';
+        } else {
+          document.getElementById('err-email').textContent = 'Please enter a valid email address';
+        }
+        valid = false;
+      }
+
+      if (!validate('phone', APP.utils.validatePhone(phone))) valid = false;
+      if (!validate('graduation', !!graduation)) valid = false;
+      if (!validate('college', college.length >= 3)) valid = false;
+      if (!validate('department', !!department)) valid = false;
+
+      const cgpaValid = !isNaN(cgpaRaw) && ((cgpaRaw >= 0 && cgpaRaw <= 10) || (cgpaRaw > 10 && cgpaRaw <= 100));
+      if (!validate('cgpa', cgpaValid)) valid = false;
+
+      if (!uploadedResumeFile) {
+        document.getElementById('fg-resume').classList.add('error');
+        valid = false;
+      }
+
+      if (!consent) {
+        APP.toast('Please accept the terms and conditions', 'warning');
+        valid = false;
+      }
+
+      if (!valid) return;
+
+      const btn = document.getElementById('submitBtn');
+      btn.textContent = 'Registering...'; btn.disabled = true;
+
+      const candidateId = APP.candidates.generateId();
+      const formData = new FormData();
+      formData.append('id', candidateId);
+      formData.append('fullName', fullName);
+      formData.append('email', email.toLowerCase());
+      formData.append('phone', phone);
+      formData.append('college', college);
+      formData.append('department', department);
+      formData.append('cgpa', cgpaRaw);
+      formData.append('graduation', graduation);
+      formData.append('registeredAt', new Date().toISOString());
+      formData.append('resume', uploadedResumeFile);
+
+      fetch(APP.API_BASE + '/api/register', {
+        method: 'POST',
+        body: formData
+      })
+      .then(async (response) => {
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.error || 'Registration failed');
+        }
+        return response.json();
+      })
+      .then((candidate) => {
+        // Save to local cache
+        APP.candidates.add(candidate);
+        APP.session.setCandidate(candidate);
+
+        // Send Welcome email (syncs to server too)
+        if (APP.emails) {
+          APP.emails.send(
+            email,
+            "Registration Confirmed - Candidate ID: " + candidateId,
+            `<h3>Welcome to JK Private Limited!</h3>
+             <p>Dear ${fullName},</p>
+             <p>Thank you for registering for our 2025 Campus Placements recruitment drive.</p>
+             <p>Here are your registration details:</p>
+             <ul>
+               <li><strong>Candidate ID:</strong> ${candidateId}</li>
+               <li><strong>Registered Email:</strong> ${email.toLowerCase()}</li>
+               <li><strong>College:</strong> ${college}</li>
+               <li><strong>Department:</strong> ${department}</li>
+             </ul>
+             <p>You can now log in to your dashboard at any time using your registered email.</p>
+             <p><strong>Next Step: Online Aptitude Test (Round 1)</strong><br>
+             Please complete the 30-minute online aptitude test from your dashboard or click the link below to begin.</p>
+             <p><a href="test.html" style="background:#0ea5e9;color:white;padding:10px 20px;text-decoration:none;border-radius:24px;display:inline-block;margin-top:10px;font-weight:bold">Take Aptitude Test Now →</a></p>
+             <p>Best regards,<br>JK Recruitment Team<br>Noida, UP</p>`
+          );
+        }
+
+        // Trigger database background refresh
+        APP.sync();
+
+        document.getElementById('candidateIdDisplay').textContent = candidateId;
+        document.getElementById('successOverlay').classList.add('active');
+        btn.textContent = 'Done!'; btn.disabled = false;
+      })
+      .catch((err) => {
+        APP.toast(err.message, 'error');
+        btn.textContent = 'Create Account & Continue →';
+        btn.disabled = false;
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // If already logged in, show shortcut
+      const session = APP.session.getCandidate();
+      if (session) {
+        const p = document.querySelector('.register-header p');
+        if (p) p.innerHTML = `Logged in as <strong>${session.fullName}</strong>. <a href="dashboard.html" class="already-link">Go to Dashboard →</a>`;
+      }
+
+      // Pre-populate email if provided in query string
+      const urlParams = new URLSearchParams(window.location.search);
+      const emailParam = urlParams.get('email');
+      if (emailParam) {
+        const emailInput = document.getElementById('email');
+        if (emailInput) {
+          emailInput.value = emailParam;
+        }
+      }
+
+      // Resume drag-drop events
+      const dropZone = document.getElementById('resumeDropZone');
+      const fileInput = document.getElementById('resumeFileInput');
+      const previewBox = document.getElementById('resumePreviewBox');
+      const resumeName = document.getElementById('resumeName');
+      const resumeSize = document.getElementById('resumeSize');
+      const deleteBtn = document.getElementById('resumeDeleteBtn');
+      const fgResume = document.getElementById('fg-resume');
+
+      if (dropZone) {
+        dropZone.addEventListener('click', () => fileInput.click());
+        
+        fileInput.addEventListener('change', (e) => handleFileSelect(e.target.files[0]));
+
+        dropZone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+          dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          dropZone.classList.remove('dragover');
+          if (e.dataTransfer.files.length) {
+            handleFileSelect(e.dataTransfer.files[0]);
+          }
+        });
+
+        deleteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          uploadedResume = null;
+          uploadedResumeFile = null;
+          fileInput.value = '';
+          previewBox.style.display = 'none';
+          dropZone.style.display = 'block';
+        });
+      }
+
+      function handleFileSelect(file) {
+        if (!file) return;
+        const extension = file.name.split('.').pop().toLowerCase();
+        const isValidExtension = ['pdf', 'doc', 'docx'].includes(extension);
+        
+        if (!isValidExtension) {
+          APP.toast('Please select a valid PDF or Word document (.pdf, .doc, .docx)', 'error');
+          return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          APP.toast('File size exceeds the 5MB limit', 'error');
+          return;
+        }
+        
+        uploadedResume = {
+          name: file.name,
+          size: (file.size / 1024).toFixed(1) + ' KB',
+          type: file.type || ('application/' + extension),
+          uploadedAt: new Date().toISOString()
+        };
+        uploadedResumeFile = file;
+        
+        resumeName.textContent = file.name;
+        resumeSize.textContent = uploadedResume.size;
+        dropZone.style.display = 'none';
+        previewBox.style.display = 'flex';
+        if (fgResume) fgResume.classList.remove('error');
+      }
+    });
+
+    function toggleNav() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

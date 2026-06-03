@@ -1,0 +1,18 @@
+{
+  "name": "jk-recruitment-portal",
+  "version": "1.0.0",
+  "description": "End-to-end Recruitment Portal for JK Private Limited",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  }
+}

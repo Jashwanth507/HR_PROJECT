@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Dashboard – JK Private Limited</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .dash-layout { display:flex; min-height:100vh; padding-top:70px; }
+    .dash-sidebar {
+      width:260px; background:var(--navy); border-right:1px solid rgba(255,255,255,0.06);
+      padding:24px 14px; position:fixed; top:70px; bottom:0; overflow-y:auto;
+      display: flex; flex-direction: column;
+    }
+    .dash-main { flex:1; margin-left:260px; padding:36px; }
+    .welcome-banner {
+      background: var(--dark-section-bg);
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 28px 32px; margin-bottom: 28px; position: relative; overflow: hidden;
+    }
+    .welcome-banner::before {
+      content: ''; position: absolute; right: -40px; top: -40px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: var(--orb-1); filter: blur(50px);
+    }
+    .welcome-banner h2 { font-family:var(--font-heading); font-size:1.5rem; font-weight:800; color:white; margin-bottom:6px; }
+    .welcome-banner p { color:rgba(255,255,255,0.6); font-size:0.9rem; }
+    .welcome-meta { display:flex; gap:20px; margin-top:16px; flex-wrap:wrap; }
+    .welcome-meta-item { display:flex; align-items:center; gap:8px; color:rgba(255,255,255,0.7); font-size:0.85rem; }
+    .section-label { font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:var(--text-muted); margin-bottom:12px; }
+    .dash-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:28px; }
+    .dash-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius-md); padding:22px; transition:var(--transition);
+    }
+    .dash-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-md); }
+    .dash-card-icon { font-size:1.8rem; margin-bottom:10px; }
+    .dash-card-label { font-size:0.78rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+    .dash-card-value { font-family:var(--font-heading); font-size:1.4rem; font-weight:800; color:var(--navy); }
+    [data-theme="dark"] .dash-card-value { color:var(--text); }
+    .dash-card-sub { font-size:0.8rem; color:var(--text-muted); margin-top:4px; }
+    .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:28px; }
+    .info-row { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border); }
+    .info-row:last-child { border-bottom:none; }
+    .info-key { font-size:0.85rem; color:var(--text-muted); }
+    .info-val { font-size:0.9rem; font-weight:600; color:var(--text); }
+    .score-ring { position:relative; width:120px; height:120px; margin:0 auto 16px; }
+    .score-ring svg { transform:rotate(-90deg); }
+    .ring-track { fill:none; stroke:var(--surface2); stroke-width:10; }
+    .ring-fill { fill:none; stroke-width:10; stroke-linecap:round; transition:stroke-dashoffset 1s ease; }
+    .ring-text { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .ring-pct { font-family:var(--font-heading); font-size:1.6rem; font-weight:900; }
+    .ring-lbl { font-size:0.7rem; color:var(--text-muted); }
+    .interview-card {
+      background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(16,185,129,0.03));
+      border:1px solid rgba(16,185,129,0.3); border-radius:var(--radius-md); padding:24px;
+    }
+    .interview-detail { display:flex; align-items:center; gap:10px; margin-bottom:10px; font-size:0.9rem; color:var(--text-muted); }
+    .interview-detail strong { color:var(--text); }
+    @media(max-width:1024px){ .dash-sidebar{display:none;} .dash-main{margin-left:0;} .dash-cards{grid-template-columns:1fr 1fr;} }
+    @media(max-width:600px){ .dash-cards{grid-template-columns:1fr;} .info-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+  <nav class="navbar glassmorphic shadow-sm sticky top-0 z-50">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo">JK</div>
+      <span class="nav-name">JK Private Limited</span>
+    </a>
+    <div class="nav-actions">
+      <button class="btn-nav btn-nav-outline btn-rounded" onclick="logout()">Logout</button>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px; z-index: 1001;">
+      <button class="theme-toggle" onclick="APP.theme.toggle()">🌙</button>
+    </div>
+  </nav>
+
+  <div class="dash-layout">
+    <aside class="dash-sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-badge">JK</div>
+        <div class="logo-text">Candidate Portal</div>
+        <div class="logo-sub" id="sb-name">Loading...</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <div class="sidebar-link active" onclick="showTab('overview')"><span class="icon">🏠</span> Overview</div>
+        <div class="sidebar-link" onclick="showTab('profile')"><span class="icon">👤</span> My Profile</div>
+        <div class="sidebar-link" onclick="showTab('result')"><span class="icon">📊</span> Test Result</div>
+        <div class="sidebar-link" onclick="showTab('interview')"><span class="icon">📅</span> HR Interview</div>
+      </div>
+      <div class="sidebar-section" style="margin-top:auto">
+        <div class="sidebar-link" onclick="window.location.href='test.html'"><span class="icon">🧠</span> Take Test</div>
+        <div class="sidebar-link" onclick="logout()"><span class="icon">🚪</span> Logout</div>
+      </div>
+    </aside>
+
+    <main class="dash-main">
+      <!-- OVERVIEW TAB -->
+      <div id="tab-overview">
+        <div class="welcome-banner">
+          <h2>Welcome back, <span id="wb-name"></span>! 👋</h2>
+          <p>Here's your recruitment status at JK Private Limited</p>
+          <div class="welcome-meta">
+            <div class="welcome-meta-item">🆔 <span id="wb-id"></span></div>
+            <div class="welcome-meta-item">📅 Registered <span id="wb-date"></span></div>
+            <div class="welcome-meta-item">🎓 <span id="wb-college"></span></div>
+          </div>
+        </div>
+        <div class="dash-cards">
+          <div class="dash-card">
+            <div class="dash-card-icon">📋</div>
+            <div class="dash-card-label">Test Status</div>
+            <div class="dash-card-value" id="dc-testStatus">Pending</div>
+            <div class="dash-card-sub" id="dc-testSub"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-icon">🎯</div>
+            <div class="dash-card-label">Score</div>
+            <div class="dash-card-value" id="dc-score">—</div>
+            <div class="dash-card-sub" id="dc-scoreSub"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-icon">📅</div>
+            <div class="dash-card-label">Interview</div>
+            <div class="dash-card-value" id="dc-interview">—</div>
+            <div class="dash-card-sub" id="dc-interviewSub"></div>
+          </div>
+        </div>
+        <div id="overview-action-area"></div>
+      </div>
+
+      <!-- PROFILE TAB -->
+      <div id="tab-profile" style="display:none">
+        <h2 style="font-family:var(--font-heading);margin-bottom:24px">My Profile</h2>
+        <div class="card">
+          <div id="profile-details"></div>
+        </div>
+      </div>
+
+      <!-- RESULT TAB -->
+      <div id="tab-result" style="display:none">
+        <h2 style="font-family:var(--font-heading);margin-bottom:24px">Test Result</h2>
+        <div id="result-content"></div>
+      </div>
+
+      <!-- INTERVIEW TAB -->
+      <div id="tab-interview" style="display:none">
+        <h2 style="font-family:var(--font-heading);margin-bottom:24px">HR Interview</h2>
+        <div id="interview-content"></div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="nav.js"></script>
+  <script src="app.js"></script>
+  <script>
+    let candidate, result, interview;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      candidate = APP.guard.requireCandidate();
+      if (!candidate) return;
+      result = APP.results.findByCandidateId(candidate.id);
+      interview = APP.interviews.findByCandidateId(candidate.id);
+      renderAll();
+    });
+
+    function renderAll() {
+      document.getElementById('sb-name').textContent = candidate.fullName;
+      document.getElementById('wb-name').textContent = candidate.fullName.split(' ')[0];
+      document.getElementById('wb-id').textContent = candidate.id;
+      document.getElementById('wb-date').textContent = APP.utils.formatDate(candidate.registeredAt);
+      document.getElementById('wb-college').textContent = candidate.college;
+      renderCards(); renderOverviewAction(); renderProfile(); renderResult(); renderInterview();
+    }
+
+    function renderCards() {
+      if (!result) {
+        document.getElementById('dc-testStatus').innerHTML = '<span style="color:#f59e0b">Pending</span>';
+        document.getElementById('dc-testSub').textContent = 'Test not taken yet';
+        document.getElementById('dc-score').textContent = '—';
+        document.getElementById('dc-interview').textContent = '—';
+      } else {
+        document.getElementById('dc-testStatus').innerHTML = result.qualified
+          ? '<span style="color:#10b981">Qualified ✅</span>'
+          : '<span style="color:#ef4444">Not Qualified ❌</span>';
+        document.getElementById('dc-testSub').textContent = APP.utils.formatDate(result.submittedAt);
+        document.getElementById('dc-score').textContent = result.score + '%';
+        document.getElementById('dc-scoreSub').textContent = result.correct + '/' + result.total + ' correct';
+        document.getElementById('dc-interview').textContent = interview ? interview.date : (result.qualified ? 'Schedule Now' : 'N/A');
+        document.getElementById('dc-interviewSub').textContent = interview ? interview.slot : '';
+      }
+    }
+
+    function renderOverviewAction() {
+      const el = document.getElementById('overview-action-area');
+      if (!result) {
+        el.innerHTML = `<div class="alert alert-info" style="margin-bottom:20px">📋 You haven't taken the aptitude test yet.</div>
+          <a href="test.html" class="btn btn-primary btn-lg">Start Aptitude Test →</a>`;
+      } else if (result.qualified && !interview) {
+        el.innerHTML = `<div class="alert alert-success">🎉 You qualified! Schedule your HR Interview.</div>
+          <button onclick="showTab('interview')" class="btn btn-success" style="margin-top:12px">Schedule Interview →</button>`;
+      } else if (result.qualified && interview) {
+        el.innerHTML = `<div class="interview-card">
+          <strong style="color:#10b981;font-size:1.05rem">✅ Interview Scheduled</strong>
+          <div class="interview-detail" style="margin-top:16px">📅 <strong>${interview.date}</strong></div>
+          <div class="interview-detail">🕐 <strong>${interview.slot}</strong></div>
+          <div class="interview-detail">🖥️ Mode: <strong>${interview.mode}</strong></div>
+          <div class="interview-detail">🆔 Interview ID: <strong>${interview.id}</strong></div>
+          ${interview.mode === 'Online' ? `<div class="interview-detail">🔗 Link: <strong><a href="#" style="color:var(--accent-light)">meet.jkpvtltd.com/${interview.id}</a></strong></div>` : ''}
+        </div>`;
+      } else {
+        el.innerHTML = `<div class="alert alert-danger">Your score was ${result.score}%. A minimum of 70% is required to qualify.</div>`;
+      }
+    }
+
+    function renderProfile() {
+      const fields = [
+        ['Full Name', candidate.fullName], ['Email', candidate.email],
+        ['Phone', candidate.phone], ['College', candidate.college],
+        ['Department', candidate.department], ['CGPA', candidate.cgpa],
+        ['Graduation Year', candidate.graduation], ['Candidate ID', candidate.id],
+        ['Registered On', APP.utils.formatDate(candidate.registeredAt)]
+      ];
+      document.getElementById('profile-details').innerHTML = fields.map(([k,v]) =>
+        `<div class="info-row"><span class="info-key">${k}</span><span class="info-val">${v}</span></div>`
+      ).join('');
+
+      // Render Resume Section
+      let resumeHtml = '';
+      if (candidate.resume) {
+        resumeHtml = `
+          <div style="margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--border);">
+            <h4 style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;">Uploaded Resume</h4>
+            <div class="resume-preview-box" style="margin-top:0; display:flex;">
+              <div class="resume-preview-info">
+                <span class="resume-preview-icon">📄</span>
+                <div>
+                  <div class="resume-preview-name">${candidate.resume.name}</div>
+                  <div class="resume-preview-size">${candidate.resume.size} &middot; Uploaded ${APP.utils.formatDate(candidate.resume.uploadedAt)}</div>
+                </div>
+              </div>
+              <button onclick="downloadResumeFile('${candidate.resume.name}')" class="btn btn-outline btn-sm" style="border-radius:var(--radius-sm); padding:6px 12px; margin-left:12px;">Download</button>
+            </div>
+            <div style="margin-top:12px;">
+              <button onclick="document.getElementById('profileResumeInput').click()" class="btn btn-secondary btn-sm" style="width:100%; border-radius:var(--radius-sm);">Replace Resume File</button>
+              <input type="file" id="profileResumeInput" style="display:none" accept=".pdf,.doc,.docx" onchange="handleReplaceResume(event)"/>
+            </div>
+          </div>
+        `;
+      } else {
+        resumeHtml = `
+          <div style="margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--border);">
+            <h4 style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;">Uploaded Resume</h4>
+            <div style="margin-top:12px;">
+              <button onclick="document.getElementById('profileResumeInput').click()" class="btn btn-primary btn-sm" style="width:100%; border-radius:var(--radius-sm);">Upload Resume File</button>
+              <input type="file" id="profileResumeInput" style="display:none" accept=".pdf,.doc,.docx" onchange="handleReplaceResume(event)"/>
+            </div>
+          </div>
+        `;
+      }
+      document.getElementById('profile-details').innerHTML += resumeHtml;
+    }
+
+    function handleReplaceResume(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const extension = file.name.split('.').pop().toLowerCase();
+      const isValidExtension = ['pdf', 'doc', 'docx'].includes(extension);
+      if (!isValidExtension) {
+        APP.toast('Please select a valid PDF or Word document (.pdf, .doc, .docx)', 'error');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        APP.toast('File size exceeds the 5MB limit', 'error');
+        return;
+      }
+      
+      APP.toast('Uploading resume...', 'info');
+
+      const formData = new FormData();
+      formData.append('resume', file);
+
+      fetch(APP.API_BASE + `/api/candidates/${candidate.id}/resume`, {
+        method: 'POST',
+        body: formData
+      })
+      .then(async (response) => {
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.error || 'Failed to replace resume');
+        }
+        return response.json();
+      })
+      .then((updatedCand) => {
+        candidate = updatedCand;
+        APP.session.setCandidate(candidate);
+        
+        // Also update local list cache
+        const list = APP.candidates.getAll().map(c => c.id === candidate.id ? candidate : c);
+        APP.candidates.save(list);
+
+        APP.toast('Resume updated successfully!', 'success');
+        renderProfile();
+        APP.sync();
+      })
+      .catch((err) => {
+        APP.toast(err.message, 'error');
+      });
+    }
+
+    function downloadResumeFile(filename) {
+      if (!filename) {
+        APP.toast('No resume found to download', 'error');
+        return;
+      }
+      window.open(APP.API_BASE + '/uploads/' + encodeURIComponent(filename), '_blank');
+    }
+
+    function renderResult() {
+      const el = document.getElementById('result-content');
+      if (!result) {
+        el.innerHTML = `<div class="alert alert-info">You haven't taken the aptitude test yet. <a href="test.html" class="btn btn-primary btn-sm" style="margin-left:12px">Take Test</a></div>`;
+        return;
+      }
+      const clr = result.qualified ? '#10b981' : '#ef4444';
+      const circumference = 2 * Math.PI * 45;
+      const dashOffset = circumference * (1 - result.score / 100);
+      el.innerHTML = `
+        <div class="card" style="text-align:center;margin-bottom:20px">
+          <div class="score-ring">
+            <svg viewBox="0 0 100 100" width="120" height="120">
+              <circle class="ring-track" cx="50" cy="50" r="45"/>
+              <circle class="ring-fill" cx="50" cy="50" r="45"
+                stroke="${clr}" stroke-dasharray="${circumference}"
+                stroke-dashoffset="${dashOffset}"/>
+            </svg>
+            <div class="ring-text">
+              <div class="ring-pct" style="color:${clr}">${result.score}%</div>
+              <div class="ring-lbl">Score</div>
+            </div>
+          </div>
+          <div style="margin-bottom:16px">${result.qualified
+            ? '<span class="badge badge-success" style="font-size:1rem;padding:8px 20px">✅ QUALIFIED</span>'
+            : '<span class="badge badge-danger" style="font-size:1rem;padding:8px 20px">❌ NOT QUALIFIED</span>'}</div>
+          <div class="stat-grid" style="max-width:400px;margin:0 auto 20px">
+            <div class="stat-card"><div class="stat-value" style="color:#10b981">${result.correct}</div><div class="stat-label">Correct</div></div>
+            <div class="stat-card"><div class="stat-value" style="color:#ef4444">${result.wrong}</div><div class="stat-label">Wrong</div></div>
+            <div class="stat-card"><div class="stat-value" style="color:#f59e0b">${result.skipped}</div><div class="stat-label">Skipped</div></div>
+          </div>
+          <button onclick="APP.export.toPDF('${candidate.id}')" class="btn btn-outline btn-sm">📄 Download PDF Report</button>
+        </div>`;
+    }
+
+    function renderInterview() {
+      const el = document.getElementById('interview-content');
+      if (!result) {
+        el.innerHTML = `<div class="alert alert-info">Complete the aptitude test first to unlock interview scheduling.</div>`;
+        return;
+      }
+      if (!result.qualified) {
+        el.innerHTML = `<div class="alert alert-danger">You need to score 70%+ to qualify for the HR Interview. Your score: ${result.score}%</div>`;
+        return;
+      }
+      if (interview) {
+        el.innerHTML = `<div class="interview-card">
+          <h3 style="color:#10b981;margin-bottom:16px">✅ Interview Confirmed</h3>
+          <div class="interview-detail">🆔 Interview ID: <strong>${interview.id}</strong></div>
+          <div class="interview-detail">📅 Date: <strong>${interview.date}</strong></div>
+          <div class="interview-detail">🕐 Time Slot: <strong>${interview.slot}</strong></div>
+          <div class="interview-detail">🖥️ Mode: <strong>${interview.mode}</strong></div>
+          ${interview.mode === 'Online' ? `<div class="interview-detail">🔗 Meet Link: <a href="#" style="color:var(--accent-light)">meet.jkpvtltd.com/${interview.id}</a></div>` : '<div class="interview-detail">📍 Venue: JK Tech Park, Noida</div>'}
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-top:12px">Please keep your Candidate ID (${candidate.id}) and Interview ID (${interview.id}) handy.</p>
+        </div>`;
+        return;
+      }
+      const dates = [];
+      for (let i = 3; i <= 12; i++) {
+        const d = new Date(); d.setDate(d.getDate() + i);
+        if (d.getDay() !== 0) dates.push(d.toISOString().split('T')[0]);
+      }
+      el.innerHTML = `
+        <div class="alert alert-success">🎉 Congratulations! You've qualified. Schedule your HR Interview below.</div>
+        <div class="card" style="margin-top:20px">
+          <h3 style="font-family:var(--font-heading);margin-bottom:20px">Schedule Your Interview</h3>
+          <form onsubmit="bookInterview(event)">
+            <div class="form-group">
+              <label class="form-label">Select Date *</label>
+              <select class="form-control" id="int-date" required>
+                <option value="">Choose a date</option>
+                ${dates.map(d => `<option value="${d}">${new Date(d).toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'long'})}</option>`).join('')}
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Time Slot *</label>
+              <select class="form-control" id="int-slot" required>
+                <option value="">Choose a time</option>
+                <option>10:00 AM – 11:00 AM</option>
+                <option>11:30 AM – 12:30 PM</option>
+                <option>2:00 PM – 3:00 PM</option>
+                <option>3:30 PM – 4:30 PM</option>
+                <option>5:00 PM – 6:00 PM</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Interview Mode *</label>
+              <div style="display:flex;gap:16px;margin-top:8px">
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.95rem">
+                  <input type="radio" name="mode" value="Online" checked style="accent-color:var(--accent)"> 🖥️ Online (Video Call)
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.95rem">
+                  <input type="radio" name="mode" value="Offline" style="accent-color:var(--accent)"> 🏢 Offline (Noida Office)
+                </label>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success" style="width:100%">Confirm Interview Slot ✓</button>
+          </form>
+        </div>`;
+    }
+
+    function bookInterview(e) {
+      e.preventDefault();
+      const date = document.getElementById('int-date').value;
+      const slot = document.getElementById('int-slot').value;
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      if (!date || !slot) { APP.toast('Please select date and time slot', 'warning'); return;  }
+      interview = {
+        id: APP.interviews.generateId(),
+        candidateId: candidate.id,
+        candidateName: candidate.fullName,
+        date, slot, mode,
+        bookedAt: new Date().toISOString(),
+        status: 'scheduled'
+      };
+      APP.interviews.add(interview);
+      APP.candidates.update(candidate.id, { interviewStatus: 'scheduled' });
+      
+      // Trigger Email Notification
+      if (APP.emails) {
+        const formattedDate = new Date(date).toLocaleDateString('en-IN', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+        APP.emails.send(
+          candidate.email,
+          "HR Interview Scheduled - Interview ID: " + interview.id,
+          `<h3>Interview Booking Confirmed</h3>
+           <p>Dear ${candidate.fullName},</p>
+           <p>Congratulations! Your Round 1 Aptitude Test result was qualified, and your HR Interview has been successfully scheduled.</p>
+           <p>Here are your interview details:</p>
+           <ul>
+             <li><strong>Interview ID:</strong> ${interview.id}</li>
+             <li><strong>Candidate ID:</strong> ${candidate.id}</li>
+             <li><strong>Date:</strong> ${formattedDate}</li>
+             <li><strong>Time Slot:</strong> ${slot}</li>
+             <li><strong>Interview Mode:</strong> ${mode}</li>
+             ${mode === 'Online' 
+               ? `<li><strong>Video Call Link:</strong> <a href="#" style="color:#0ea5e9">meet.jkpvtltd.com/${interview.id}</a></li>`
+               : `<li><strong>Location Venue:</strong> JK Tech Park, Sector 62, Noida, UP - 201301</li>`
+             }
+           </ul>
+           <p><strong>Important Instructions:</strong></p>
+           <ol>
+             <li>Please join/arrive 10 minutes before the scheduled time slot.</li>
+             <li>Keep a printed copy of your Score Report and your College ID handy.</li>
+             <li>If the interview is online, ensure you have a stable internet connection and functioning webcam/microphone.</li>
+           </ol>
+           <p>For questions or rescheduling requests, reply to this email or contact the HR Helpline.</p>
+           <p>Best regards,<br>JK Human Resources Team<br>JK Private Limited</p>`
+        );
+      }
+
+      APP.toast('Interview scheduled successfully!', 'success');
+      renderInterview(); renderOverviewAction(); renderCards();
+    }
+
+    function showTab(tab) {
+      ['overview','profile','result','interview'].forEach(t => {
+        const target = document.getElementById('tab-'+t);
+        if (target) target.style.display = t === tab ? 'block' : 'none';
+      });
+      document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('onclick')?.includes(`'${tab}'`)) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    function logout() {
+      APP.session.clearCandidate();
+      window.location.href = 'index.html';
+    }
+
+    // Reactive DB sync listener
+    window.addEventListener('jk_db_updated', () => {
+      candidate = APP.session.getCandidate();
+      if (candidate) {
+        result = APP.results.findByCandidateId(candidate.id);
+        interview = APP.interviews.findByCandidateId(candidate.id);
+        renderAll();
+      }
+    });
+  </script>
+</body>
+</html>
