@@ -24,15 +24,36 @@ if (backendParam) {
   window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
 }
 
-// Force correct backend URL - clear any stale localhost values
-const savedBackend = localStorage.getItem('jk_backend_url');
-if (savedBackend && (savedBackend.includes('localhost') || savedBackend.includes('192.168'))) {
-  localStorage.removeItem('jk_backend_url');
-}
-
+const _saved = localStorage.getItem('jk_backend_url');
+const _hardcoded = 'https://hr-project-sqfw.onrender.com';
 const API_BASE = (location.protocol === 'file:')
-  ? (localStorage.getItem('jk_backend_url') || 'http://localhost:3000')
-  : (localStorage.getItem('jk_backend_url') || 'https://hr-project-sqfw.onrender.com');
+  ? (_saved || 'http://localhost:3000')
+  : (_saved || _hardcoded);
+
+// Debug banner - shows on screen
+window.addEventListener('DOMContentLoaded', () => {
+  let b = document.getElementById('debug-banner');
+  if (!b) {
+    b = document.createElement('div');
+    b.id = 'debug-banner';
+    b.style.position = 'fixed';
+    b.style.bottom = '0';
+    b.style.left = '0';
+    b.style.right = '0';
+    b.style.background = 'rgba(239, 68, 68, 0.95)';
+    b.style.color = '#ffffff';
+    b.style.padding = '8px 16px';
+    b.style.fontSize = '11px';
+    b.style.fontFamily = 'monospace';
+    b.style.zIndex = '999999';
+    b.style.textAlign = 'center';
+    b.style.wordBreak = 'break-all';
+    b.style.borderTop = '2px solid #b91c1c';
+    document.body.appendChild(b);
+  }
+  b.style.display = 'block';
+  b.textContent = 'API_BASE=' + API_BASE + ' | saved=' + _saved + ' | proto=' + location.protocol;
+});
 
 console.log('JK Placements Engine API Base:', API_BASE || '(same origin)');
 
