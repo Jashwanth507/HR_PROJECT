@@ -24,6 +24,12 @@ if (backendParam) {
   window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
 }
 
+// Force correct backend URL - clear any stale localhost values
+const savedBackend = localStorage.getItem('jk_backend_url');
+if (savedBackend && (savedBackend.includes('localhost') || savedBackend.includes('192.168'))) {
+  localStorage.removeItem('jk_backend_url');
+}
+
 const API_BASE = (location.protocol === 'file:')
   ? (localStorage.getItem('jk_backend_url') || 'http://localhost:3000')
   : (localStorage.getItem('jk_backend_url') || 'https://hr-project-sqfw.onrender.com');
