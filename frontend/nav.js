@@ -385,9 +385,12 @@
         <label style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--text-light)">Laptop Server URL</label>
         <input type="text" id="connBackendInput" class="form-control" style="padding:8px 12px; font-size:0.82rem;" placeholder="e.g. https://xxxx.ngrok-free.app" />
       </div>
-      <div class="conn-btn-row">
-        <button id="connTestBtn" class="btn btn-secondary btn-sm" style="flex:1; padding:8px 10px; font-size:0.75rem;border-radius:var(--radius-sm)">Test Ping</button>
-        <button id="connSaveBtn" class="btn btn-primary btn-sm" style="flex:1; padding:8px 10px; font-size:0.75rem;border-radius:var(--radius-sm)">Save & Connect</button>
+      <div class="conn-btn-row" style="display:flex; flex-direction:column; gap:6px;">
+        <div style="display:flex; gap:8px; width:100%;">
+          <button id="connTestBtn" class="btn btn-secondary btn-sm" style="flex:1; padding:8px 10px; font-size:0.75rem;border-radius:var(--radius-sm)">Test Ping</button>
+          <button id="connSaveBtn" class="btn btn-primary btn-sm" style="flex:1; padding:8px 10px; font-size:0.75rem;border-radius:var(--radius-sm)">Save & Connect</button>
+        </div>
+        <button id="connResetBtn" class="btn btn-secondary btn-sm" style="width:100%; padding:6px 10px; font-size:0.72rem; border-color:#ef4444; color:#ef4444; background:rgba(239,68,68,0.04); border-radius:var(--radius-sm);">Reset to Default Production Backend</button>
       </div>
       <div class="conn-help" style="max-height: 180px; overflow-y: auto;">
         <strong>Mobile Connection Guide:</strong>
@@ -503,6 +506,19 @@
       localStorage.setItem('jk_backend_url', url);
       if (typeof APP !== 'undefined') {
         APP.toast('Settings saved! Reloading page...', 'success');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        window.location.reload();
+      }
+    });
+
+    // Reset to default button
+    document.getElementById('connResetBtn').addEventListener('click', () => {
+      localStorage.removeItem('jk_backend_url');
+      if (typeof APP !== 'undefined') {
+        APP.toast('Reset to default backend. Reloading...', 'success');
         setTimeout(() => {
           window.location.reload();
         }, 1000);
