@@ -10,7 +10,7 @@
   <style>
     .dash-layout { display:flex; min-height:100vh; padding-top:70px; }
     .dash-sidebar {
-      width:260px; background:var(--navy); border-right:1px solid rgba(255,255,255,0.06);
+      width:260px; background:var(--neutral-950); border-right:1px solid rgba(255,255,255,0.06);
       padding:24px 14px; position:fixed; top:70px; bottom:0; overflow-y:auto;
       display: flex; flex-direction: column;
     }
@@ -210,7 +210,7 @@
           <div class="interview-detail">🕐 <strong>${interview.slot}</strong></div>
           <div class="interview-detail">🖥️ Mode: <strong>${interview.mode}</strong></div>
           <div class="interview-detail">🆔 Interview ID: <strong>${interview.id}</strong></div>
-          ${interview.mode === 'Online' ? `<div class="interview-detail">🔗 Link: <strong><a href="#" style="color:var(--accent-light)">meet.jkpvtltd.com/${interview.id}</a></strong></div>` : ''}
+          ${interview.mode === 'Online' ? `<div class="interview-detail">🔗 Link: <strong><a href="#" style="color:var(--accent)">meet.jkpvtltd.com/${interview.id}</a></strong></div>` : ''}
         </div>`;
       } else {
         el.innerHTML = `<div class="alert alert-danger">Your score was ${result.score}%. A minimum of 70% is required to qualify.</div>`;
@@ -373,7 +373,7 @@
           <div class="interview-detail">📅 Date: <strong>${interview.date}</strong></div>
           <div class="interview-detail">🕐 Time Slot: <strong>${interview.slot}</strong></div>
           <div class="interview-detail">🖥️ Mode: <strong>${interview.mode}</strong></div>
-          ${interview.mode === 'Online' ? `<div class="interview-detail">🔗 Meet Link: <a href="#" style="color:var(--accent-light)">meet.jkpvtltd.com/${interview.id}</a></div>` : '<div class="interview-detail">📍 Venue: JK Tech Park, Noida</div>'}
+          ${interview.mode === 'Online' ? `<div class="interview-detail">🔗 Meet Link: <a href="#" style="color:var(--accent)">meet.jkpvtltd.com/${interview.id}</a></div>` : '<div class="interview-detail">📍 Venue: JK Tech Park, Noida</div>'}
           <p style="font-size:0.85rem;color:var(--text-muted);margin-top:12px">Please keep your Candidate ID (${candidate.id}) and Interview ID (${interview.id}) handy.</p>
         </div>`;
         return;

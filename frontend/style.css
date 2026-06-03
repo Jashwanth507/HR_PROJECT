@@ -494,7 +494,7 @@ tbody tr:last-child { border-bottom: none; }
 .app-layout { display: flex; min-height: 100vh; padding-top: 72px; }
 .sidebar {
   width: 260px; min-height: calc(100vh - 72px);
-  background: var(--navy); padding: 28px 14px;
+  background: var(--neutral-950); padding: 28px 14px;
   position: fixed; top: 72px; left: 0;
   overflow-y: auto; transition: var(--transition); z-index: 100;
 }
