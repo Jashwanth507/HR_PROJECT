@@ -24,11 +24,22 @@ if (backendParam) {
   window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
 }
 
+// Clear stale local backend URLs if browsing on a live hosted environment
+const savedBackend = localStorage.getItem('jk_backend_url');
+if (savedBackend && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+  if (savedBackend.includes('localhost') || savedBackend.includes('127.0.0.1') || savedBackend.includes('192.168.')) {
+    localStorage.removeItem('jk_backend_url');
+  }
+}
+
+
 const _saved = localStorage.getItem('jk_backend_url');
 const _hardcoded = 'https://hr-project-sqfw.onrender.com';
+const isFrontendHost = window.location.hostname.includes('vercel.app') || window.location.hostname.includes('netlify.app');
+
 const API_BASE = (location.protocol === 'file:')
   ? (_saved || 'http://localhost:3000')
-  : (_saved || _hardcoded);
+  : (isFrontendHost ? (_saved || _hardcoded) : window.location.origin);
 
 
 

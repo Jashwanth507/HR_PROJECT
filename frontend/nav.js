@@ -446,7 +446,13 @@
     }
 
     // Populate current config
-    const currentBackend = localStorage.getItem('jk_backend_url') || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? window.location.origin : 'http://localhost:3000');
+    const _hardcoded = 'https://hr-project-sqfw.onrender.com';
+    const isFrontendHost = window.location.hostname.includes('vercel.app') || window.location.hostname.includes('netlify.app');
+    const defaultBackend = (window.location.protocol === 'file:')
+      ? 'http://localhost:3000'
+      : (isFrontendHost ? _hardcoded : window.location.origin);
+
+    const currentBackend = localStorage.getItem('jk_backend_url') || defaultBackend;
     input.value = currentBackend;
     checkMixedContentWarning(currentBackend);
 
